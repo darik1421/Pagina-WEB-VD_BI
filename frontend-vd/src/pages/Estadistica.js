@@ -10,6 +10,8 @@ function Estadisticas({ rol }) {
   const [compras, setCompras] = useState([]);
   const [myChart, setMyChart] = useState(null);
   const [myChart2,setMyChart2] = useState(null);
+  const [productosPorCategoria, setProductosPorCategoria] = useState([]);
+
 
   function formatearNumeroConComas(numero) {
     // Aplica toFixed para limitar los decimales a dos
@@ -19,56 +21,61 @@ function Estadisticas({ rol }) {
     return numeroFormateado.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }  
 
-useEffect(() => {
-  id (productosPorcategoria.length > 0) {
-    const ctx = document.getElementById('myCategories');
+  useEffect(() => {
+    fetch('http://localhost:5000/crud/productosPorCategoria')
+      .then((response) => response.json())
+      .then((data) => setProductosPorCategoria(data))
+      .catch((error) => console.error('Error al obtener los datos:', error));
+  }, []);
 
-    const labels = productosPorcategoria.map((categoria) => categoria.nombre_Categoria);
-    const data = productosPorcategoria.map((categoria) => categoria.cantidad);
-     
-    const chart = new Chart(ctx, {
-      type: 'pie',
-     data: {
-       labels: labels,
-       datasets:  [{
-         label: 'Cantidad de productos por categoría',
-         data: data,
-         backgroundColor: [
-           'rgba (255, 99, 132, 0.5)',
-           'rgba (54, 162, 235, 0.5)',
-           'rgba (255, 206, 86, 0.5)',
-           'rgba (75, 192, 192, 0.5)',
-           'rgba (153, 102, 255, 0.5)',
-           'rgba (255, 159, 64, 0.5)',
-         ],
-         borderColor: [
-          'rgba (255, 99, 132, 1)',
-          'rgba (54, 162, 235, 1)',
-          'rgba (255, 206, 86, 1)',
-          'rgba (75, 192, 192, 1)',
-          'rgba (153, 102, 255, 1)',
-          'rgba (255, 159, 64, 1)',
-         ],
-         borderWidth: 1
-       }]
-     },
-     options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'top',
+  useEffect(() => {
+    if (productosPorCategoria.length > 0) {
+      const ctx = document.getElementById('myCategories');
+
+      const labels = productosPorCategoria.map((categoria) => categoria.categorias);
+      const data = productosPorCategoria.map((categoria) => categoria.cantidad);
+
+      const chart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Cantidad de productos por categoría',
+            data: data,
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.5)',
+              'rgba(54, 162, 235, 0.5)',
+              'rgba(255, 206, 86, 0.5)',
+              'rgba(75, 192, 192, 0.5)',
+              'rgba(153, 102, 255, 0.5)',
+              'rgba(255, 159, 64, 0.5)',
+            ],
+            borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)',
+            ],
+            borderWidth: 1
+          }]
         },
-        title: {
-          display: true,
-          text: 'Cantidad de productos por categoria'
-        
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Cantidad de productos por categoría'
+            }
+          }
         }
-      }
-     }
-    });
-  }
-}, [productosPorcategoria]);
-
+      });
+    }
+  }, [productosPorCategoria]);
 
 
 
@@ -268,64 +275,84 @@ const generarReporteAlmacenImg = async () => {
 
 
 
-  return (
-    <div>
-      <Header rol={ rol } />  
+return (
+  <div>
+    <Header rol={rol} />
 
-      <Container className="mt-8"> {/* Add margin-top to the Container */}
-        <Row className="global-margin-top-history">
-          <Col md={6}>
-            <Card>
-              <Card.Body>
-                <Card.Title className="text-center">Estados de las compras</Card.Title>
-                <div style={{ margin: '20px 0' }}> {/* Add margin to the canvas */}
-                  <canvas id="myChart" height="200"></canvas> {/* Adjust height as needed */}
-                </div>
-              </Card.Body>
+    {/* Primera sección: Estados de las compras */}
+    <Container className="mt-8">
+      <Row className="global-margin-top-history">
+        <Col md={6}>
+          <Card>
+            <Card.Body>
+              <Card.Title className="text-center">Estados de las compras</Card.Title>
+              <div style={{ margin: '20px 0' }}>
+                <canvas id="myChart" height="200"></canvas>
+              </div>
+            </Card.Body>
 
-              <Card.Footer className="text-center">
-                <Button variant="primary" className='buttom-right button-color' onClick={generarReporteCompras}>
-                  Generar Reporte
-                </Button>
-                <Button className='buttom-left button-color' onClick={generarReporteComprasImg}>
-                  Generar reporte con imagen
-                </Button>
-              </Card.Footer>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
+            <Card.Footer className="text-center">
+              <Button variant="primary" className='buttom-right button-color' onClick={generarReporteCompras}>
+                Generar Reporte
+              </Button>
+              <Button className='buttom-left button-color' onClick={generarReporteComprasImg}>
+                Generar reporte con imagen
+              </Button>
+            </Card.Footer>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
 
-      <col sm="6" md= "6" lg="12">
-         
-      </col>
+    {/* Segunda sección: Estados de Almacen */}
+    <Container className="mt-8">
+      <Row className="global-margin-top-history">
+        <Col md={6}>
+          <Card>
+            <Card.Body>
+              <Card.Title className="text-center">Estados de Almacen</Card.Title>
+              <div style={{ margin: '20px 0' }}>
+                <canvas id="myChart2" height="200"></canvas>
+              </div>
+            </Card.Body>
 
-      <Container className="mt-8"> {/* Add margin-top to the Container */}
-        <Row className="global-margin-top-history">
-          <Col md={6}>
-            <Card>
-              <Card.Body>
-                <Card.Title className="text-center">Estados de Almacen</Card.Title>
-                <div style={{ margin: '20px 0' }}> {/* Add margin to the canvas */}
-                  <canvas id="myChart2" height="200"></canvas> {/* Adjust height as needed */}
-                </div>
-              </Card.Body>
+            <Card.Footer className="text-center">
+              <Button variant="primary" className='buttom-right button-color' onClick={generarReporteAlmacen}>
+                Generar Reporte
+              </Button>
+              <Button className='buttom-left button-color' onClick={generarReporteAlmacenImg}>
+                Generar reporte con imagen
+              </Button>
+            </Card.Footer>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
 
-              <Card.Footer className="text-center">
-                <Button variant="primary" className='buttom-right button-color' onClick={generarReporteAlmacen}>
-                  Generar Reporte
-                </Button>
-                <Button className='buttom-left button-color' onClick={generarReporteAlmacenImg}>
-                  Generar reporte con imagen
-                </Button>
-              </Card.Footer>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-    </div>
+    {/* Tercera sección: Producto por categoría */}
+    <Container className="mt-8">
+      <Row className="justify-content-center"> {/* Centra la columna */}
+        <Col sm="6" md="6" lg="4">
+          <Card>
+            <Card.Body>
+              <Card.Title className="text-center">Producto por categoría</Card.Title>
+              <div style={{ margin: '20px 0' }}>
+                <canvas id="myCategories" height="120"></canvas>
+              </div>
+            </Card.Body>
+            <Card.Footer className="text-center">
+              <Button onClick={generarReporteAlmacen}>
+                Generar PDF
+              </Button>
+            </Card.Footer>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
 
-  );
+  </div>
+);
+
 }
 
 export default Estadisticas;
