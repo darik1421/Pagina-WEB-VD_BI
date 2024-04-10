@@ -17,7 +17,61 @@ function Estadisticas({ rol }) {
     
     // Usa una expresión regular para agregar comas
     return numeroFormateado.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }  
+
+useEffect(() => {
+  id (productosPorcategoria.length > 0) {
+    const ctx = document.getElementById('myCategories');
+
+    const labels = productosPorcategoria.map((categoria) => categoria.nombre_Categoria);
+    const data = productosPorcategoria.map((categoria) => categoria.cantidad);
+     
+    const chart = new Chart(ctx, {
+      type: 'pie',
+     data: {
+       labels: labels,
+       datasets:  [{
+         label: 'Cantidad de productos por categoría',
+         data: data,
+         backgroundColor: [
+           'rgba (255, 99, 132, 0.5)',
+           'rgba (54, 162, 235, 0.5)',
+           'rgba (255, 206, 86, 0.5)',
+           'rgba (75, 192, 192, 0.5)',
+           'rgba (153, 102, 255, 0.5)',
+           'rgba (255, 159, 64, 0.5)',
+         ],
+         borderColor: [
+          'rgba (255, 99, 132, 1)',
+          'rgba (54, 162, 235, 1)',
+          'rgba (255, 206, 86, 1)',
+          'rgba (75, 192, 192, 1)',
+          'rgba (153, 102, 255, 1)',
+          'rgba (255, 159, 64, 1)',
+         ],
+         borderWidth: 1
+       }]
+     },
+     options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        title: {
+          display: true,
+          text: 'Cantidad de productos por categoria'
+        
+        }
+      }
+     }
+    });
   }
+}, [productosPorcategoria]);
+
+
+
+
 
   useEffect(() => {
     fetch('http://localhost:5000/crud/readDetalleCompras')
@@ -241,6 +295,10 @@ const generarReporteAlmacenImg = async () => {
           </Col>
         </Row>
       </Container>
+
+      <col sm="6" md= "6" lg="12">
+         
+      </col>
 
       <Container className="mt-8"> {/* Add margin-top to the Container */}
         <Row className="global-margin-top-history">
