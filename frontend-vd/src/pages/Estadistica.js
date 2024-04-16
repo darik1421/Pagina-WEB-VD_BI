@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';  // Importa 'jspdf-autotable'
 import Header from '../components/Header'; 
@@ -9,15 +9,11 @@ import html2canvas from 'html2canvas';
 function Estadisticas({ rol }) {
   const [compras, setCompras] = useState([]);
   const [myChart, setMyChart] = useState(null);
-  const [myChart2,setMyChart2] = useState(null);
+  const [myChart2, setMyChart2] = useState(null);
   const [productosPorCategoria, setProductosPorCategoria] = useState([]);
 
-
   function formatearNumeroConComas(numero) {
-    // Aplica toFixed para limitar los decimales a dos
     const numeroFormateado = Number(numero).toFixed(2);
-    
-    // Usa una expresión regular para agregar comas
     return numeroFormateado.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }  
 
@@ -31,11 +27,11 @@ function Estadisticas({ rol }) {
   useEffect(() => {
     if (productosPorCategoria.length > 0) {
       const ctx = document.getElementById('myCategories');
-
-      const labels = productosPorCategoria.map((categoria) => categoria.categorias);
+  
+      const labels = productosPorCategoria.map((categoria) => categoria.nombre_Categoria);
       const data = productosPorCategoria.map((categoria) => categoria.cantidad);
-
-      const chart = new Chart(ctx, {
+  
+      let chart = new Chart(ctx, {
         type: 'pie',
         data: {
           labels: labels,
@@ -74,11 +70,12 @@ function Estadisticas({ rol }) {
           }
         }
       });
+  
+      if (chart) {
+        chart.destroy();
+      }
     }
   }, [productosPorCategoria]);
-
-
-
 
   useEffect(() => {
     fetch('http://localhost:5000/crud/readDetalleCompras')
@@ -86,7 +83,6 @@ function Estadisticas({ rol }) {
       .then((data) => setCompras(data))
       .catch((error) => console.error('Error al obtener los detalles de compra:', error));
   }, []);
-
 
   useEffect(() => {
     if (compras.length > 0) {
@@ -106,7 +102,7 @@ function Estadisticas({ rol }) {
           datasets: [{
             label: 'Cantidad de productos',
             data: cantidad,
-            backgroundColor: 'rgba(0, 128, 0, 0.5)', // Cambia el color a verde
+            backgroundColor: 'rgba(0, 128, 0, 0.5)',
             borderColor: 'rgba(0, 128, 0, 1)',
             borderWidth: 1
           }]
@@ -141,7 +137,7 @@ function Estadisticas({ rol }) {
           datasets: [{
             label: 'Total de las compras',
             data: totalcompra,
-            backgroundColor: 'rgba(0, 128, 0, 0.5)', // Cambia el color a verde
+            backgroundColor: 'rgba(0, 128, 0, 0.5)',
             borderColor: 'rgba(0, 128, 0, 1)',
             borderWidth: 1
           }]
@@ -160,34 +156,33 @@ function Estadisticas({ rol }) {
 
   const generarReporteCompras = () => {
     fetch('http://localhost:5000/crud/readDetalleCompras')
-    .then((response) => response.json())
-    .then((detallesCompra) => {
-      console.log('Estado de las ventas:', detallesCompra);
-    
-      const doc = new jsPDF();
-      doc.text('Reporte de las ventas', 20, 10);
+      .then((response) => response.json())
+      .then((detallesCompra) => {
+        console.log('Estado de las ventas:', detallesCompra);
+      
+        const doc = new jsPDF();
+        doc.text('Reporte de las ventas', 20, 10);
   
         const headers = ['Producto','Precio', 'Precio Compra', 'Stock', 'Cantidad Compra', 'Total Compra'];
         const data = detallesCompra.map((detalleCompra) => [
           detalleCompra.nombre_Producto,
-          `C$ ${formatearNumeroConComas(detalleCompra.precio)}`, // Agrega el signo de córdoba y formatea a dos decimales
-        `C$ ${formatearNumeroConComas(detalleCompra.precio_Compra)}`, // Agrega el signo de córdoba y formatea a dos decimales
+          `C$ ${formatearNumeroConComas(detalleCompra.precio)}`,
+          `C$ ${formatearNumeroConComas(detalleCompra.precio_Compra)}`,
           detalleCompra.cantidad,
           detalleCompra.cantidad_Compra,
-          `C$ ${detalleCompra.total_Compra.toFixed(2)}`, // Agrega el signo de córdoba y formatea a dos decimales
+          `C$ ${detalleCompra.total_Compra.toFixed(2)}`,
         ]);
   
-        // Agrega la tabla de detalles al documento PDF
-        try{
-        doc.autoTable({
-          startY: 20,
-          head: [headers],
-          body: data,
-          theme: 'striped',
-          margin: { top: 15 },
-        });
+        try {
+          doc.autoTable({
+            startY: 20,
+            head: [headers],
+            body: data,
+            theme: 'striped',
+            margin: { top: 15 },
+          });
   
-        doc.save('reporte_ventas.pdf');
+          doc.save('reporte_ventas.pdf');
           console.log('Documento PDF generado y descargado.');
         } catch (error) {
           console.error('Error al generar el PDF con autoTable:', error);
@@ -229,130 +224,105 @@ function Estadisticas({ rol }) {
       })
       .catch((error) => console.error('Error al obtener el stock:', error));      
   };
-  
-    // Definición de la función generarReporteAlmacenImg como una función asíncrona
-const generarReporteComprasImg = async () => {
-  try {
-    // Utiliza html2canvas para capturar el contenido del elemento con el ID 'myChart' y obtener un objeto canvas
-    const canvas = await html2canvas(document.getElementById('myChart'));
-    // Crea un nuevo objeto jsPDF para trabajar con documentos PDF
-    const pdf = new jsPDF();
-    // Convierte el objeto canvas a una URL de datos en formato PNG
-    const imgData = canvas.toDataURL('image/png');
-    // Añade un texto al documento PDF
-    pdf.text("Reporte de las compras", 20, 10);
-    // Añade la imagen capturada del gráfico al documento PDF, con ajustes de coordenadas y tamaño
-    pdf.addImage(imgData, 'PNG', 10, 20, 100, 100);
-    // Guarda el documento PDF con un nombre específico
-    pdf.save("reporte_compras_Imagen.pdf");
-  } catch (error) {
-    // Captura y maneja cualquier error que pueda ocurrir durante la ejecución del bloque try
-    console.error('Error al generar el reporte con imagen:', error);
-  }
-};
 
-const generarReporteAlmacenImg = async () => {
-  try {
-    // Utiliza html2canvas para capturar el contenido del elemento con el ID 'myChart' y obtener un objeto canvas
-    const canvas = await html2canvas(document.getElementById('myChart2'));
-    // Crea un nuevo objeto jsPDF para trabajar con documentos PDF
-    const pdf = new jsPDF();
-    // Convierte el objeto canvas a una URL de datos en formato PNG
-    const imgData = canvas.toDataURL('image/png');
-    // Añade un texto al documento PDF
-    pdf.text("Reporte del almacen", 20, 10);
-    // Añade la imagen capturada del gráfico al documento PDF, con ajustes de coordenadas y tamaño
-    pdf.addImage(imgData, 'PNG', 10, 20, 100, 100);
-    // Guarda el documento PDF con un nombre específico
-    pdf.save("reporte_Almacen_Imagen.pdf");
-  } catch (error) {
-    // Captura y maneja cualquier error que pueda ocurrir durante la ejecución del bloque try
-    console.error('Error al generar el reporte con imagen:', error);
-  }
-};
+  const generarReporteComprasImg = async () => {
+    try {
+      const canvas = await html2canvas(document.getElementById('myChart'));
+      const pdf = new jsPDF();
+      const imgData = canvas.toDataURL('image/png');
+      pdf.text("Reporte de las compras", 20, 10);
+      pdf.addImage(imgData, 'PNG', 10, 20, 100, 100);
+      pdf.save("reporte_compras_Imagen.pdf");
+    } catch (error) {
+      console.error('Error al generar el reporte con imagen:', error);
+    }
+  };
 
+  const generarReporteAlmacenImg = async () => {
+    try {
+      const canvas = await html2canvas(document.getElementById('myChart2'));
+      const pdf = new jsPDF();
+      const imgData = canvas.toDataURL('image/png');
+      pdf.text("Reporte del almacen", 20, 10);
+      pdf.addImage(imgData, 'PNG', 10, 20, 100, 100);
+      pdf.save("reporte_Almacen_Imagen.pdf");
+    } catch (error) {
+      console.error('Error al generar el reporte con imagen:', error);
+    }
+  };
 
+  return (
+    <div>
+      <Header rol={rol} />
 
+      <Container className="mt-8">
+        <Row className="global-margin-top-history">
+          <Col md={6}>
+            <Card>
+              <Card.Body>
+                <Card.Title className="text-center">Estados de las compras</Card.Title>
+                <div style={{ margin: '20px 0' }}>
+                  <canvas id="myChart" height="200"></canvas>
+                </div>
+              </Card.Body>
 
+              <Card.Footer className="text-center">
+                <Button variant="primary" className='buttom-right button-color' onClick={generarReporteCompras}>
+                  Generar Reporte
+                </Button>
+                <Button className='buttom-left button-color' onClick={generarReporteComprasImg}>
+                  Generar reporte con imagen
+                </Button>
+              </Card.Footer>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
 
-return (
-  <div>
-    <Header rol={rol} />
+      <Container className="mt-8">
+        <Row className="global-margin-top-history">
+          <Col md={6}>
+            <Card>
+              <Card.Body>
+                <Card.Title className="text-center">Estados de Almacen</Card.Title>
+                <div style={{ margin: '20px 0' }}>
+                  <canvas id="myChart2" height="200"></canvas>
+                </div>
+              </Card.Body>
 
-    {/* Primera sección: Estados de las compras */}
-    <Container className="mt-8">
-      <Row className="global-margin-top-history">
-        <Col md={6}>
-          <Card>
-            <Card.Body>
-              <Card.Title className="text-center">Estados de las compras</Card.Title>
-              <div style={{ margin: '20px 0' }}>
-                <canvas id="myChart" height="200"></canvas>
-              </div>
-            </Card.Body>
+              <Card.Footer className="text-center">
+                <Button variant="primary" className='buttom-right button-color' onClick={generarReporteAlmacen}>
+                  Generar Reporte
+                </Button>
+                <Button className='buttom-left button-color' onClick={generarReporteAlmacenImg}>
+                  Generar reporte con imagen
+                </Button>
+              </Card.Footer>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
 
-            <Card.Footer className="text-center">
-              <Button variant="primary" className='buttom-right button-color' onClick={generarReporteCompras}>
-                Generar Reporte
-              </Button>
-              <Button className='buttom-left button-color' onClick={generarReporteComprasImg}>
-                Generar reporte con imagen
-              </Button>
-            </Card.Footer>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
-
-    {/* Segunda sección: Estados de Almacen */}
-    <Container className="mt-8">
-      <Row className="global-margin-top-history">
-        <Col md={6}>
-          <Card>
-            <Card.Body>
-              <Card.Title className="text-center">Estados de Almacen</Card.Title>
-              <div style={{ margin: '20px 0' }}>
-                <canvas id="myChart2" height="200"></canvas>
-              </div>
-            </Card.Body>
-
-            <Card.Footer className="text-center">
-              <Button variant="primary" className='buttom-right button-color' onClick={generarReporteAlmacen}>
-                Generar Reporte
-              </Button>
-              <Button className='buttom-left button-color' onClick={generarReporteAlmacenImg}>
-                Generar reporte con imagen
-              </Button>
-            </Card.Footer>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
-
-    {/* Tercera sección: Producto por categoría */}
-    <Container className="mt-8">
-      <Row className="justify-content-center"> {/* Centra la columna */}
-        <Col sm="6" md="6" lg="4">
-          <Card>
-            <Card.Body>
-              <Card.Title className="text-center">Producto por categoría</Card.Title>
-              <div style={{ margin: '20px 0' }}>
+      <Container className="mt-8">
+        <Row className="global-margin-top-history">
+          <Col sm={6} md={6} lg={12}>
+            <Card>
+              <Card.Body>
+                <Card.Title>Productos por Categorias</Card.Title>
                 <canvas id="myCategories" height="120"></canvas>
-              </div>
-            </Card.Body>
-            <Card.Footer className="text-center">
-              <Button onClick={generarReporteAlmacen}>
-                Generar PDF
-              </Button>
-            </Card.Footer>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
+              </Card.Body>
 
-  </div>
-);
-
+              <Card.Body>
+                <Button onClick={generarReporteAlmacen}>
+                  Generar reporte
+                </Button>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    </div>
+  );
 }
 
 export default Estadisticas;
