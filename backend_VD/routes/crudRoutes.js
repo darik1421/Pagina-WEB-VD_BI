@@ -811,14 +811,14 @@ router.post('/createusuarios', (req, res) => {
     router.get('/productosPorCategoria', (req, res) =>{
       const sql =`
       SELECT
-        categorias,
+      Categorias.nombre_Categoria,
         COUNT(Productos.id_Producto) AS cantidad
       FROM
-        Producto
+      Productos
       INNER JOIN
-        Categoria ON Productos.id_Categoria = Categoria.id_Categoria
+      Categorias ON Productos.id_Categoria = Categorias.id_Categoria
       GROUP BY
-        Categoria.id_Categoria
+      Categorias.id_Categoria
     `;
     
     db.query(sql, (err, result) => {
