@@ -10,6 +10,7 @@ function Estadisticas({ rol }) {
   const [compras, setCompras] = useState([]);
   const [myChart, setMyChart] = useState(null);
   const [myChart2, setMyChart2] = useState(null);
+  const [categoryChart, setCategoryChart] = useState(null);
   const [productosPorCategoria, setProductosPorCategoria] = useState([]);
 
   function formatearNumeroConComas(numero) {
@@ -17,65 +18,69 @@ function Estadisticas({ rol }) {
     return numeroFormateado.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }  
 
-  useEffect(() => {
+    //Apartado de estadistica de pastel
+  useEffect(()=> {
     fetch('http://localhost:5000/crud/productosPorCategoria')
-      .then((response) => response.json())
-      .then((data) => setProductosPorCategoria(data))
-      .catch((error) => console.error('Error al obtener los datos:', error));
+    .then((response) => response.json())
+    .then((data) => setProductosPorCategoria(data))
+    .catch((error) => console.error('Error al obtener los productos por categorìa:', error));
   }, []);
 
   useEffect(() => {
     if (productosPorCategoria.length > 0) {
       const ctx = document.getElementById('myCategories');
-  
-      const labels = productosPorCategoria.map((categoria) => categoria.nombre_Categoria);
-      const data = productosPorCategoria.map((categoria) => categoria.cantidad);
-  
-      let chart = new Chart(ctx, {
-        type: 'pie',
+
+      if (categoryChart !== null) {
+        categoryChart.destroy();  // Destruye el gráfico existente antes de crear uno nuevo para evitar conflictos
+      }
+
+      const labels = productosPorCategoria.map((Categoria) => Categoria.nombre_Categoria); 
+      const data = productosPorCategoria.map((Categoria) => Categoria.cantidad);
+
+      const categorias = new Chart(ctx,{
+        type:'pie',
         data: {
-          labels: labels,
+          labels:labels,
           datasets: [{
-            label: 'Cantidad de productos por categoría',
+            label:'Cantidad de productos por categoria',
             data: data,
             backgroundColor: [
-              'rgba(255, 99, 132, 0.5)',
-              'rgba(54, 162, 235, 0.5)',
-              'rgba(255, 206, 86, 0.5)',
-              'rgba(75, 192, 192, 0.5)',
-              'rgba(153, 102, 255, 0.5)',
-              'rgba(255, 159, 64, 0.5)',
+              'rgba(255,99,132,0.5)',
+              'rgba(54,162,235,0.5)',
+              'rgba(255,206,86,0.5)',
+              'rgba(75,192,192,0.5)',
+              'rgba(153,102,255,0.5)',
+              'rgba(255,159,64,0.5)'
             ],
             borderColor: [
-              'rgba(255, 99, 132, 1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)',
+              'rgba(255,99,132,1)',
+              'rgba(54,162,235,1)',
+              'rgba(255,206,86,1)',
+              'rgba(75,192,192,1)',
+              'rgba(153,102,255,1)',
+              'rgba(255,159,64,1)'
             ],
             borderWidth: 1
           }]
         },
         options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'top',
+          responsive:true,
+          plugins:{
+            legend:{
+              position:'top',
             },
             title: {
-              display: true,
-              text: 'Cantidad de productos por categoría'
+              display:true,
+              text:'Cantidad de productos por categoría'
             }
           }
         }
       });
-  
-      if (chart) {
-        chart.destroy();
-      }
+      setCategoryChart(categorias); // Guarda la referencia al nuevo gráfico en el estado
     }
+    
   }, [productosPorCategoria]);
+
 
   useEffect(() => {
     fetch('http://localhost:5000/crud/readDetalleCompras')
@@ -276,11 +281,7 @@ function Estadisticas({ rol }) {
               </Card.Footer>
             </Card>
           </Col>
-        </Row>
-      </Container>
-
-      <Container className="mt-8">
-        <Row className="global-margin-top-history">
+    
           <Col md={6}>
             <Card>
               <Card.Body>
@@ -300,27 +301,27 @@ function Estadisticas({ rol }) {
               </Card.Footer>
             </Card>
           </Col>
+
+
+           <Col sm="6" md="6" lg="6">
+        <Card>
+          <Card.Body>
+            <Card.Title>Productos por Categorìa</Card.Title>
+            <canvas id="myCategories" height="120"></canvas>         
+          </Card.Body>
+
+          <Card.Body>
+            <Button onClick={generarReporteAlmacen}>
+              Generar PDF
+            </Button>
+          </Card.Body>
+        </Card>
+  </Col>
+      
+
         </Row>
       </Container>
 
-      <Container className="mt-8">
-        <Row className="global-margin-top-history">
-          <Col sm={6} md={6} lg={12}>
-            <Card>
-              <Card.Body>
-                <Card.Title>Productos por Categorias</Card.Title>
-                <canvas id="myCategories" height="120"></canvas>
-              </Card.Body>
-
-              <Card.Body>
-                <Button onClick={generarReporteAlmacen}>
-                  Generar reporte
-                </Button>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
     </div>
   );
 }
