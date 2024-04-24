@@ -58,13 +58,13 @@ fecha_Estimada DATE
 );
 
 CREATE TABLE Detalle_Venta(
-id_DetalleVenta INT AUTO_INCREMENT PRIMARY KEY,
+id_Detalleventa INT AUTO_INCREMENT PRIMARY KEY,
 cantidad_Venta INT,
 precio_Venta DECIMAL (12,4),
 id_Producto INT,
 total_Venta DECIMAL (12,2),
 CONSTRAINT FK_Detalle_Venta_Producto FOREIGN KEY (id_Producto) REFERENCES Productos(id_Producto),
-id_Compra INT,
+id_Venta INT,
 CONSTRAINT FK_Detalle_Venta_Ventas FOREIGN KEY (id_Venta) REFERENCES Ventas(id_Venta)
 );
 

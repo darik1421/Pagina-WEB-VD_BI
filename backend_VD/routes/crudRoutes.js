@@ -511,23 +511,23 @@ router.post('/createusuarios', (req, res) => {
 
     //Ruta para actualizar un registro exitente por ID (Detalle_Compra)
 
-    router.put('/updateDetalleCompra/:id', (req, res) => {
+    router.put('/updateDetalleVenta/:id', (req, res) => {
       // Obtén el ID del registro a actualizar desde los parámetros de la URL
       const id = req.params.id;
   
       // Recibe los datos actualizados desde el cuerpo de la solicitud (req.body)
-      const {cantidad_Compra, precio_Compra, id_Producto, id_Compra} = req.body;
+      const {cantidad_Venta, precio_Venta, id_Producto, id_Venta} = req.body;
   
       // Verifica si se proporcionaron los datos necesarios
-      if (!cantidad_Compra) {
+      if (!cantidad_Venta) {
         return res.status(400).json({ error: 'Todos los campos son obligatorios' });
       }
   
       // Realiza la consulta SQL para actualizar el registro por ID
       const sql = `
-        UPDATE detalle_compra
-        SET cantidad_Compra = ?, precio_Compra = ?, id_Producto = ?, id_Compra = ?
-        WHERE id_Detallecompra = ?
+        UPDATE detalle_venta
+        SET cantidad_Venta = ?, precio_Venta = ?, id_Producto = ?, id_Venta = ?
+        WHERE id_Detalleventa = ?
       `;
   
       const values = [cantidad_Compra, precio_Compra, id_Producto, id_Compra,id];
@@ -588,7 +588,7 @@ router.post('/createusuarios', (req, res) => {
         presentacion,
         descripcion,
         precio,
-        cantidad,
+        cantidad_Disponible,
         id_Marca,
         id_Categoria,
       } = req.body;
@@ -607,7 +607,7 @@ router.post('/createusuarios', (req, res) => {
     
       const sql = `
         UPDATE productos
-        SET nombre_Producto = ?, presentacion = ?, imagen = ?, descripcion = ?, precio = ?, cantidad = ?, id_Marca = ?, id_Categoria = ?
+        SET nombre_Producto = ?, presentacion = ?, imagen = ?, descripcion = ?, precio = ?, cantidad_Disponible = ?, id_Marca = ?, id_Categoria = ?
         WHERE id_Producto = ?
       `;
       
@@ -640,7 +640,9 @@ router.post('/createusuarios', (req, res) => {
           // Realiza la consulta SQL para actualizar el registro por ID
           const sql = `
             UPDATE usuarios
-            SET nombre_Usuario = ?, correo_Electronico = ?, contrasena = ?
+            SET nombre_Usuario = ?, segundo_Nombre = ?, apellido_Usuario = ?,  
+            segundo_Apellido = ?, genero = ?, fecha_Nacimiento = ?, correo_Electronico = ?, 
+            contrasena = ?
             WHERE id_Usuario = ?
           `;
       
@@ -705,12 +707,12 @@ router.post('/createusuarios', (req, res) => {
 
   //Ruta para eliminar un registro existente por ID (compras)
 
-  router.delete('/deletecompras/:id', (req, res) => {
+  router.delete('/deleteventas/:id', (req, res) => {
     // Obtén el ID del registro a eliminar desde los parámetros de la URL
     const id = req.params.id;
 
     // Realiza la consulta SQL para eliminar el registro por ID
-    const sql = 'DELETE FROM compras WHERE id_Compra = ?';
+    const sql = 'DELETE FROM ventas WHERE id_Venta = ?';
 
     // Ejecuta la consulta
     db.query(sql, [id], (err, result) => {
@@ -726,12 +728,12 @@ router.post('/createusuarios', (req, res) => {
 
   // Ruta para eliminar un registro existente por ID (Detalle_compra)
   
-  router.delete('/deleteDetalleCompra/:id', (req, res) => {
+  router.delete('/deleteDetalleVenta/:id', (req, res) => {
     // Obtén el ID del registro a eliminar desde los parámetros de la URL
     const id = req.params.id;
 
     // Realiza la consulta SQL para eliminar el registro por ID
-    const sql = 'DELETE FROM detalle_compra WHERE id_Detallecompra = ?';
+    const sql = 'DELETE FROM detalle_venta WHERE id_Detalleventa = ?';
 
     // Ejecuta la consulta
     db.query(sql, [id], (err, result) => {
