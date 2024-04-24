@@ -18,7 +18,7 @@ presentacion VARCHAR (25) NULL,
 imagen VARCHAR (255) NOT NULL,
 descripcion VARCHAR (255) NULL,
 precio DECIMAL (12,4) NOT NULL,
-cantidad INT NOT NULL,
+cantidad_Disponible INT NOT NULL,
 id_Marca INT,
 CONSTRAINT FK_Producto_Marca FOREIGN KEY (id_Marca) REFERENCES Marcas(id_Marca),
 id_Categoria INT,
@@ -27,8 +27,13 @@ CONSTRAINT FK_Producto_Categoria FOREIGN KEY (id_Categoria) REFERENCES Categoria
 
 CREATE TABLE Usuarios(
 id_Usuario INT AUTO_INCREMENT PRIMARY KEY,
-nombre_Usuario VARCHAR(25),
-correo_Electronico VARCHAR (150),
+nombre_Usuario VARCHAR (25) NOT NULL,
+segundo_Nombre VARCHAR (25) NOT NULL,
+apellidos_Usuario VARCHAR (25) NOT NULL,
+segundo_Apellido VARCHAR (25) NOT NULL,
+genero CHAR (1) NOT NULL,
+fecha_Nacimiento DATE,
+correo_Electronico VARCHAR (150) NOT NULL,
 contrasena VARCHAR (15),
 rol VARCHAR (20) NOT NULL
 );
@@ -44,26 +49,22 @@ id_Producto INT,
 CONSTRAINT FK_Comentario_Producto FOREIGN KEY (id_Producto) REFERENCES Productos(id_Producto)
 );
 
-CREATE TABLE Compras(
-id_Compra INT AUTO_INCREMENT PRIMARY KEY,
-fecha_Compra DATE,
-hora_Compra TIME,
+CREATE TABLE Ventas(
+id_Venta INT AUTO_INCREMENT PRIMARY KEY,
+fecha_Venta DATE,
+hora_Venta TIME,
 estado VARCHAR(15),
 fecha_Estimada DATE
 );
 
-CREATE TABLE Detalle_Compra(
-id_Detallecompra INT AUTO_INCREMENT PRIMARY KEY,
-cantidad_Compra INT,
-precio_Compra DECIMAL (12,4),
+CREATE TABLE Detalle_Venta(
+id_DetalleVenta INT AUTO_INCREMENT PRIMARY KEY,
+cantidad_Venta INT,
+precio_Venta DECIMAL (12,4),
 id_Producto INT,
-total_Compra DECIMAL (12,2),
-CONSTRAINT FK_DetalleCompra_Producto FOREIGN KEY (id_Producto) REFERENCES Productos(id_Producto),
+total_Venta DECIMAL (12,2),
+CONSTRAINT FK_Detalle_Venta_Producto FOREIGN KEY (id_Producto) REFERENCES Productos(id_Producto),
 id_Compra INT,
-CONSTRAINT FK_DetalleCompra_Compras FOREIGN KEY (id_Compra) REFERENCES Compras(id_Compra)
+CONSTRAINT FK_Detalle_Venta_Ventas FOREIGN KEY (id_Venta) REFERENCES Ventas(id_Venta)
 );
 
-CREATE TABLE Sesion_Administrador(
-usuario VARCHAR (25),
-contrasena VARCHAR(15)
-);

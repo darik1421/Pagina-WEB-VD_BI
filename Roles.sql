@@ -26,4 +26,8 @@ SET DEFAULT ROLE ALL TO
 SET GLOBAL log_bin_trust_function_creators = 1;
 
 GRANT ALL PRIVILEGES ON variedadesduarte.* TO 'Devloper'@'localhost';
-FLUSH PRIVILEGES
+FLUSH PRIVILEGES;
+
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'cris2004';
+FLUSH PRIVILEGES;
+
