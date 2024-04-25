@@ -11,8 +11,13 @@ function Gestionusuario({rol}) {
   const [selectedusuario, setSelectedUsuario] = useState({});
   const [formData, setFormData] = useState({
     nombre_Usuario: '',
+    segundo_Nombre: '',
+    apellido_Usuario: '',
+    segundo_Apellido: '',
+    genero: '',
+    fecha_Nacimiento: '',
     correo_Electronico: '',
-    contrasena: '',  
+    contrasena: '', 
 
   });
 
@@ -43,7 +48,12 @@ const [deleteUserId, setDeleteUserId] = useState(null);
 
   const filteredUsuario = usuarios.filter((usuario) => {
     const nombre_Usuario = usuario.nombre_Usuario.toLowerCase();
-    const correo_Electronico = usuario.correo_Electronico.toLowerCase();
+    const segundo_Nombre = usuario.segundo_Apellido.toLowerCase(); 
+    const apellido_Usuario = usuario.apellido_Usuario.toLowerCase(); 
+    const segundo_Apellido  = usuario.segundo_Apellido.toLowerCase();
+    const genero = usuario.genero.toLowerCase(); 
+    const fecha_Nacimiento = usuario.fecha_Nacimiento.toLowerCase();
+   const correo_Electronico = usuario.correo_Electronico.toLowerCase();
     const contraseña = usuario.contrasena.toLowerCase();
     const rol = usuario.rol.toLowerCase();
     const search = searchQuery.toLowerCase();
@@ -51,6 +61,11 @@ const [deleteUserId, setDeleteUserId] = useState(null);
     return (
       nombre_Usuario.includes(search) ||
       correo_Electronico.includes(search) ||
+      segundo_Nombre.includes(search) ||
+      apellido_Usuario.includes(search) ||
+      segundo_Apellido.includes(search) ||
+      genero.includes(search) ||
+      fecha_Nacimiento ||
       contraseña.includes(search) ||
       rol.includes(search) 
     );
@@ -64,6 +79,11 @@ const [deleteUserId, setDeleteUserId] = useState(null);
 
     setFormData({
       nombre_Usuario: usuario.nombre_Usuario,
+      segundo_Nombre: usuario.segundo_Nombre,
+      apellido_Usuario: usuario.apellido_Usuario,
+      segundo_Apellido: usuario.segundo_Apellido,
+      genero: usuario.genero,
+      fecha_Nacimiento: new Date(usuario.fecha_Nacimiento).toISOString().split('T')[0], // Format date as YYYY-MM-DD
       correo_Electronico: usuario.correo_Electronico,
       contrasena: usuario.contrasena,
     });
@@ -162,6 +182,11 @@ const [deleteUserId, setDeleteUserId] = useState(null);
               <tr>
                 <th>ID</th>
                 <th>Nombre</th>
+                <th>Segundo nombre</th>
+                <th>Apellido</th>
+                <th>Segundo apellido</th>
+                <th>Género</th>
+                <th>Fecha nacimiento</th>
                 <th>Correo</th>
                 <th>Contraseña</th>
                 <th>Acciones</th>
@@ -172,6 +197,11 @@ const [deleteUserId, setDeleteUserId] = useState(null);
                 <tr key={usuario.id_Usuario}>
                   <td>{usuario.id_Usuario}</td>
                   <td>{usuario.nombre_Usuario}</td>
+                  <td>{usuario.segundo_Nombre}</td>
+                  <td>{usuario.apellido_Usuario}</td>
+                  <td>{usuario.segundo_Apellido}</td>
+                  <td>{usuario.genero}</td>
+                  <td>{new Date(usuario.fecha_Nacimiento).toLocaleDateString('en-GB')}</td> {/* Format date as YYYY-MM-DD */}
                   <td>{usuario.correo_Electronico}</td>
                   <td>{usuario.contrasena}</td>
                   <td>
@@ -208,6 +238,72 @@ const [deleteUserId, setDeleteUserId] = useState(null);
                       />
                     </FloatingLabel>
                   </Col>
+
+                  <Col sm="6" md="6" lg="4">
+                    <FloatingLabel controlId="segundo_Nombre" label="Segundo nombre">
+                      <Form.Control
+                        type="text"
+                        placeholder="Ingrese su segundo nombre"
+                        name="segundo_Nombre"
+                        value={formData.segundo_Nombre}
+                        onChange={handleFormChange}
+                      />
+                    </FloatingLabel>
+                  </Col>
+
+                  <Col sm="6" md="6" lg="4">
+                    <FloatingLabel controlId="apellido_Usuario" label="Apellido">
+                      <Form.Control
+                        type="text"
+                        placeholder="Ingrese su apellido"
+                        name="apellido_Usuario"
+                        value={formData.apellido_Usuario}
+                        onChange={handleFormChange}
+                      />
+                    </FloatingLabel>
+                  </Col>
+
+                  <Col sm="6" md="6" lg="4">
+                    <FloatingLabel controlId="segundo_Apellido" label="Segundo apellido">
+                      <Form.Control
+                        type="text"
+                        placeholder="Ingrese su segundo apellido"
+                        name="segundo_Apellido"
+                        value={formData.segundo_Apellido}
+                        onChange={handleFormChange}
+                      />
+                    </FloatingLabel>
+                  </Col>
+
+                  <Col sm="6" md="6" lg="4">
+                    <FloatingLabel controlId="genero" label="Género">
+                    <Form.Select
+                        aria-label="Seleccionar Género"
+                        name="genero"
+                        value={formData.genero}
+                        onChange={handleFormChange}
+                        >
+                        <option value="">Seleccionar Género</option>
+                        <option value="Masculino">Masculino</option>
+                        <option value="Femenino">Femenino</option>
+
+                        </Form.Select>
+                        </FloatingLabel>
+                      </Col>
+
+                      <Col sm="6" md="6" lg="4">
+                  <FloatingLabel controlId="fecha_Nacimiento" label="Fecha de Nacimiento">
+                    <Form.Control
+                      type="date"
+                      placeholder="Ingrese la fecha de nacimiento"
+                      name="fecha_Nacimiento"
+                      value={formData.fecha_Nacimiento}
+                      onChange={handleFormChange}
+                    />
+                  </FloatingLabel>
+                </Col>
+
+
                   <Col sm="6" md="6" lg="4">
                     <FloatingLabel controlId="correo_Electronico" label="Correo">
                       <Form.Control
@@ -219,6 +315,7 @@ const [deleteUserId, setDeleteUserId] = useState(null);
                       />
                     </FloatingLabel>
                   </Col>
+
                   <Col sm="12" md="6" lg="4">
                     <FloatingLabel controlId="contrasena" label="Contraseña">
                       <Form.Control

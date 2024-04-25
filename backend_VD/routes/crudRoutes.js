@@ -138,9 +138,9 @@ router.get('/nombremarcas', (req, res) => {
 
   //Ruta para consultar compras
 
-  router.get('/readcompras', (req, res) => {
+  router.get('/readventas', (req, res) => {
 
-    const sql = 'SELECT * FROM compras';
+    const sql = 'SELECT * FROM ventas';
   
     db.query(sql, (err, result) => {
         if (err) {
@@ -153,8 +153,8 @@ router.get('/nombremarcas', (req, res) => {
   });
 
     //Ruta para consultar Detalle compra
-    router.get('/readDetalleCompras', (req, res) => {
-      const sql = 'SELECT detalle_compra.*, productos.nombre_Producto, productos.precio, productos.cantidad, compras.estado FROM detalle_compra INNER JOIN productos ON detalle_compra.id_Producto = productos.id_Producto INNER JOIN compras ON detalle_compra.id_Compra = compras.id_Compra';
+    router.get('/readDetalleVentas', (req, res) => {
+      const sql = 'SELECT detalle_venta.*, productos.nombre_Producto, productos.precio, productos.cantidad_Disponible, ventas.estado FROM detalle_venta INNER JOIN productos ON detalle_venta.id_Producto = productos.id_Producto INNER JOIN ventas ON detalle_venta.id_Venta = ventas.id_Venta';
     
       db.query(sql, (err, result) => {
         if (err) {
@@ -188,22 +188,6 @@ router.get('/nombremarcas', (req, res) => {
   router.get('/readproducto', (req, res) => {
 
     const sql = 'SELECT * FROM productos';
-  
-    db.query(sql, (err, result) => {
-        if (err) {
-            console.error('Error al leer registros:', err);
-            res.status(500).json({ error: 'Error al leer registros' });
-        } else {
-            res.status(200).json(result);
-        }
-    });
-  });
-
-  //Ruta para consultar sesion_administrador
-
-  router.get('/readSesionAdministrador', (req, res) => {
-
-    const sql = 'SELECT * FROM sesion_administrador';
   
     db.query(sql, (err, result) => {
         if (err) {
@@ -288,24 +272,23 @@ router.get('/nombremarcas', (req, res) => {
   //Ruta para insertar compras
 
 // Modificar la ruta /createcompras
-router.post('/createcompras', (req, res) => {
-  const { estado, fecha_Estimada, detalle,precio_Compra} = req.body;
-  const fecha_Compra = new Date();
-  const hora_Compra = new Date();
+router.post('/createventas', (req, res) => {
+  const { estado, fecha_Estimada, detalle,precio_Venta} = req.body;
+  const fecha_Venta = new Date();
+  const hora_Venta = new Date();
 
     // Insertar la compra
-    const sqlCompra = 'INSERT INTO compras ( fecha_Compra, hora_Compra, estado, fecha_Estimada) VALUES (?, ?, ?, ?)';
-    db.query(sqlCompra, [fecha_Compra, hora_Compra, estado, fecha_Estimada], (err, result) => {
+    db.query(sqlCompra, [fecha_Venta, hora_Venta, estado, fecha_Estimada], (err, result) => {
       if (err) {
         console.error('Error al insertar venta:', err);
         return res.status(500).json({ error: 'Error al insertar venta' });
       }
 
-        const idCompra = result.insertId;
+        const idVenta = result.insertId;
 
         // Insertar el detalle de compra
-        const sqlDetalle = 'INSERT INTO detalle_compra (cantidad_Compra,precio_Compra,id_Producto,id_Compra) VALUES ?';
-        const values = detalle.map((item) => [item.cantidad_Compra,precio_Compra,item.id_Producto,idCompra]);
+        const sqlDetalle = 'INSERT INTO detalle_venta (cantidad_Venta,precio_Venta,id_Producto,id_Venta) VALUES ?';
+        const values = detalle.map((item) => [item.cantidad_Venta,precio_Venta,item.id_Producto,idVenta]);
         db.query(sqlDetalle, [values], (err, result) => {
           if (err) {
             console.error('Error al insertar detalle de venta:', err);
@@ -354,16 +337,16 @@ router.post('/createcompras', (req, res) => {
   // Ruta para insertar Producto
 
   router.post('/createproducto', (req, res) => {
-    const {nombre_Producto,presentacion,imagen,descripcion,precio,cantidad,id_Marca,id_Categoria} = req.body;
+    const {nombre_Producto,presentacion,imagen,descripcion,precio,cantidad_Disponible,id_Marca,id_Categoria} = req.body;
   
-    // Verifica si se proporcionó el nombre de la categoría
-    if (!nombre_Producto ||!presentacion ||!imagen ||!descripcion ||!precio ||!cantidad ||!id_Marca ||!id_Categoria) {
+    // Verifica si se proporcionó el nombre del producto
+    if (!nombre_Producto ||!presentacion ||!imagen ||!descripcion ||!precio ||!cantidad_Disponible ||!id_Marca ||!id_Categoria) {
       return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
   
-    // Consulta SQL para insertar una nueva categoría
+    // Consulta SQL para insertar una nuevo producto
     const sql = 'INSERT INTO productos (nombre_Producto,presentacion,imagen,descripcion,precio,cantidad,id_Marca,id_Categoria) VALUES (?,?,?,?,?,?,?,?)';
-    const values = [nombre_Producto,presentacion,imagen,descripcion,precio,cantidad,id_Marca,id_Categoria];
+    const values = [nombre_Producto,presentacion,imagen,descripcion,precio,cantidad_Disponible,id_Marca,id_Categoria];
   
     // Ejecuta la consulta SQL
     db.query(sql, values, (err, result) => {
@@ -382,20 +365,29 @@ router.post('/createcompras', (req, res) => {
 
 
 router.post('/createusuarios', (req, res) => {
-  const { nombre_Usuario, correo_Electronico, contrasena, rol } = req.body;
+  const { nombre_Usuario,segundo_Nombre,apellido_Usuario,segundo_Apellido,genero,fecha_Nacimiento, 
+    correo_Electronico, contrasena, rol } = req.body;
 
-  // Llama al procedimiento almacenado
-  const sql = 'CALL InsertarUsuario(?, ?, ?, ?)';
-  const values = [nombre_Usuario, correo_Electronico, contrasena, rol];
+      // Verifica si se proporcionó el nombre del usuario
+      if (!nombre_Usuario ||!segundo_Nombre ||!apellido_Usuario ||!segundo_Apellido ||!genero ||!fecha_Nacimiento ||!correo_Electronico ||!contrasena||
+      !rol) {
+        return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+      }
 
-  db.query(sql, values, (err, result) => {
-    if (err) {
-      console.error('Error al insertar Usuario:', err);
-      res.status(500).json({ error: 'Error al insertar Usuario' });
-    } else {
-      // Devuelve la respuesta del procedimiento almacenado
-      res.status(201).json({ message: result[0][0].message });
-    }
+     
+    // Consulta SQL para insertar una nuevo usuario
+      const sql = 'INSERT INTO usuarios (nombre_Usuario,segundo_Nombre,apellido_Usuario,segundo_Apellido,genero,fecha_Nacimiento,correo_Electronico,contrasena,rol) VALUES (?,?,?,?,?,?,?,?,?)';
+    const values = [nombre_Usuario,segundo_Nombre,apellido_Usuario,segundo_Apellido,genero,fecha_Nacimiento,correo_Electronico,contrasena,rol];
+
+     // Ejecuta la consulta SQL
+     db.query(sql, values, (err, result) => {
+      if (err) {
+        console.error('Error al insertar usuario:', err);
+        res.status(500).json({ error: 'Error al insertar usuario' });
+      } else {
+        // Devuelve una respuesta exitosa
+        res.status(201).json({ message: 'usuario insertado con éxito' });
+      }
   });
 });
 
@@ -476,12 +468,12 @@ router.post('/createusuarios', (req, res) => {
 
     //Ruta para actualizar un registro existente por ID (compra)
 
-    router.put('/updatecompras/:id', (req, res) => {
+    router.put('/updateventas/:id', (req, res) => {
       // Obtén el ID del registro a actualizar desde los parámetros de la URL
       const id = req.params.id;
   
       // Recibe los datos actualizados desde el cuerpo de la solicitud (req.body)
-      const {fecha_compra,hora_compra,estado,fecha_estimada} = req.body;
+      const {fecha_Venta,hora_Venta,estado,fecha_estimada} = req.body;
   
       // Verifica si se proporcionaron los datos necesarios
       if (!fecha_compra) {
@@ -490,12 +482,12 @@ router.post('/createusuarios', (req, res) => {
   
       // Realiza la consulta SQL para actualizar el registro por ID
       const sql = `
-        UPDATE compras
-        SET fecha_compra,hora_compra,estado,fecha_estimada = ?,?,?,?
-        WHERE id_Compra = ?
+        UPDATE ventas
+        SET fecha_Venta,hora_Venta,estado,fecha_estimada = ?,?,?,?
+        WHERE id_Venta = ?
       `;
   
-      const values = [fecha_compra,hora_compra,estado,fecha_estimada,id];
+      const values = [fecha_Venta,hora_Venta,estado,fecha_estimada,id];
   
       // Ejecuta la consulta
       db.query(sql, values, (err, result) => {
@@ -611,7 +603,7 @@ router.post('/createusuarios', (req, res) => {
         WHERE id_Producto = ?
       `;
       
-      const values = [nombre_Producto, presentacion, nuevaImagen, descripcion, precio, cantidad, id_Marca, id_Categoria, id];
+      const values = [nombre_Producto, presentacion, nuevaImagen, descripcion, precio, cantidad_Disponible, id_Marca, id_Categoria, id];
       
       db.query(sql, values, (err, result) => {
         if (err) {
@@ -630,10 +622,10 @@ router.post('/createusuarios', (req, res) => {
           const id = req.params.id;
       
           // Recibe los datos actualizados desde el cuerpo de la solicitud (req.body)
-          const {nombre_Usuario, correo_Electronico, contrasena} = req.body;
+          const {nombre_Usuario,segundo_Nombre,apellido_Usuario,segundo_Apellido,genero,fecha_Nacimiento, correo_Electronico, contrasena} = req.body;
       
           // Verifica si se proporcionaron los datos necesarios
-          if (!nombre_Usuario) {
+          if (!nombre_Usuario,!segundo_Nombre,!apellido_Usuario,!segundo_Apellido,!genero,!fecha_Nacimiento) {
             return res.status(400).json({ error: 'Todos los campos son obligatorios' });
           }
       
@@ -646,7 +638,7 @@ router.post('/createusuarios', (req, res) => {
             WHERE id_Usuario = ?
           `;
       
-          const values = [nombre_Usuario, correo_Electronico, contrasena,id];
+          const values = [nombre_Usuario,segundo_Nombre,apellido_Usuario,segundo_Apellido,genero,fecha_Nacimiento, correo_Electronico, contrasena,id];
       
           // Ejecuta la consulta
           db.query(sql, values, (err, result) => {

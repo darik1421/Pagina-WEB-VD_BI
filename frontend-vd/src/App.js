@@ -13,12 +13,11 @@ import Gestionusuario from './pages/Gestionusuario';
 import Comentario from './pages/Comentario';
 import Gestioncomentario from './pages/Gestioncomentario';
 import Login from './pages/Login';
-import Detallecompra from './pages/Detallecompra';
+import Detalleventa from './pages/Detalleventa';
 import Catalogo from './pages/Catalogo';
 import Estadistica from './pages/Estadistica';
-import GestionDetalle from './pages/GestionDetallecompra';
+import GestionDetalle from './pages/GestionDetalleventa';
 import SinAcceso from './pages/SinAcceso';
-import RegistroUsuario from './pages/RegistroUsuario';
 
 function App() {
 
@@ -50,11 +49,10 @@ function App() {
         <Route path="/Gestionusuario" element={userRol ? <Gestionusuario rol={userRol}/> : <Navigate to="/SinAcceso" />} />
         <Route path="/Comentario" element={userRol ? <Comentario rol={userRol}/> : <Navigate to="/SinAcceso" />} />
         <Route path="/Gestioncomentario" element={userRol ? <Gestioncomentario rol={userRol}/> : <Navigate to="/SinAcceso" />} />
-        <Route path="/Detallecompra" element={userRol ? <Detallecompra rol={userRol} /> : <Navigate to="/SinAcceso" />} />
+        <Route path="/Detalleventa" element={userRol ? <Detalleventa rol={userRol} /> : <Navigate to="/SinAcceso" />} />
         <Route path="/Catalogo" element={userRol ? <Catalogo rol={userRol} id_Usuario={id_Usuario} /> : <Navigate to="/SinAcceso" />} />
         <Route path="/Estadistica" element={userRol ? <Estadistica rol={userRol} /> : <Navigate to="/SinAcceso" />} />
-        <Route path="/GestionDetallecompra" element={userRol ? <GestionDetalle rol={userRol} /> : <Navigate to="/SinAcceso" />} />
-        <Route path="/RegistroUsuario" element={<RegistroUsuario/>} />
+        <Route path="/GestionDetalleventa" element={userRol ? <GestionDetalle rol={userRol} /> : <Navigate to="/SinAcceso" />} />
         <Route path="/SinAcceso" element={<SinAcceso />} />
       </Routes>
     </Router>
