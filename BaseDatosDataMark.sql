@@ -35,7 +35,7 @@ id_Tiempo INTEGER,
 CONSTRAINT FK_VENTAS_TIEMPO FOREIGN KEY (id_Tiempo) REFERENCES D_Tiempos (id_Tiempo),
 id_Producto INTEGER,
 CONSTRAINT FK_VENTAS_PRODUCTO FOREIGN KEY (id_Producto) REFERENCES D_Productos (id_Producto),
-total_Venta DOUBLE,
+total_Venta DECIMAL (12,2),
 cantidad_Productos INTEGER,
 precio_Venta DECIMAL (12,4)
 );
