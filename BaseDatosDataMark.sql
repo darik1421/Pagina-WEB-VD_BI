@@ -4,12 +4,8 @@ USE TablaHechos;
 CREATE TABLE D_Usuarios(
 id_Usuario INTEGER AUTO_INCREMENT PRIMARY KEY,
 nombre_Usuario VARCHAR (25) NOT NULL,
-segundo_Nombre VARCHAR (25) NOT NULL,
-apellidos_Usuario VARCHAR (25) NOT NULL,
-segundo_Apellido VARCHAR (25) NOT NULL,
 genero VARCHAR (9) NOT NULL,
-fecha_Nacimiento DATE,
-correo_Electronico VARCHAR (150) NOT NULL
+fecha_Nacimiento DATE
 );
 
 CREATE TABLE D_Tiempos(
@@ -18,7 +14,8 @@ fecha DATE NOT NULL,
 ano INTEGER NOT NULL,
 mes INTEGER NOT NULL,
 semana INTEGER NOT NULL,
-dia INTEGER NOT NULL
+dia INTEGER NOT NULL,
+trimestre INTEGER NOT NULL
 );
 
 CREATE TABLE D_Productos(
@@ -38,7 +35,8 @@ id_Tiempo INTEGER,
 CONSTRAINT FK_VENTAS_TIEMPO FOREIGN KEY (id_Tiempo) REFERENCES D_Tiempos (id_Tiempo),
 id_Producto INTEGER,
 CONSTRAINT FK_VENTAS_PRODUCTO FOREIGN KEY (id_Producto) REFERENCES D_Productos (id_Producto),
-total_Compra DOUBLE,
-cantidad_Productos INTEGER
+total_Venta DOUBLE,
+cantidad_Productos INTEGER,
+precio_Venta DECIMAL (12,4)
 );
 

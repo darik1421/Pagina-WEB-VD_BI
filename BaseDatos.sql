@@ -28,11 +28,11 @@ CONSTRAINT FK_Producto_Categoria FOREIGN KEY (id_Categoria) REFERENCES Categoria
 CREATE TABLE Usuarios(
 id_Usuario INT AUTO_INCREMENT PRIMARY KEY,
 nombre_Usuario VARCHAR (25) NOT NULL,
-segundo_Nombre VARCHAR (25) NOT NULL,
+segundo_Nombre VARCHAR (25) NULL,
 apellido_Usuario VARCHAR (25) NOT NULL,
-segundo_Apellido VARCHAR (25) NOT NULL,
+segundo_Apellido VARCHAR (25) NULL,
 genero VARCHAR (9) NOT NULL,
-fecha_Nacimiento DATE,
+fecha_Nacimiento DATE NOT NULL,
 correo_Electronico VARCHAR (150) NOT NULL,
 contrasena VARCHAR (15),
 rol VARCHAR (20) NOT NULL
@@ -61,8 +61,8 @@ CREATE TABLE Detalle_Venta(
 id_Detalleventa INT AUTO_INCREMENT PRIMARY KEY,
 cantidad_Productos INT,
 precio_Venta DECIMAL (12,4),
-id_Producto INT,
 total_Venta DECIMAL (12,2),
+id_Producto INT,
 CONSTRAINT FK_Detalle_Venta_Producto FOREIGN KEY (id_Producto) REFERENCES Productos(id_Producto),
 id_Venta INT,
 CONSTRAINT FK_Detalle_Venta_Ventas FOREIGN KEY (id_Venta) REFERENCES Ventas(id_Venta)
