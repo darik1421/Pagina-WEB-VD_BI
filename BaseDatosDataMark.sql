@@ -7,13 +7,14 @@ nombre_Usuario VARCHAR (25) NOT NULL,
 segundo_Nombre VARCHAR (25) NOT NULL,
 apellidos_Usuario VARCHAR (25) NOT NULL,
 segundo_Apellido VARCHAR (25) NOT NULL,
-genero CHAR (1) NOT NULL,
+genero VARCHAR (9) NOT NULL,
 fecha_Nacimiento DATE,
 correo_Electronico VARCHAR (150) NOT NULL
 );
 
 CREATE TABLE D_Tiempos(
 id_Tiempo INTEGER AUTO_INCREMENT PRIMARY KEY,
+fecha DATE NOT NULL,
 ano INTEGER NOT NULL,
 mes INTEGER NOT NULL,
 semana INTEGER NOT NULL,
@@ -26,7 +27,7 @@ nombre_Producto VARCHAR (255) NOT NULL,
 nombre_Categoria VARCHAR (25) NOT NULL,
 nombre_Marca VARCHAR (25) NOT NULL,
 cantidad_Disponible INTEGER,
-precio_Venta DOUBLE
+precio DECIMAL (12,4) NOT NULL
 );
 
 CREATE TABLE H_Ventas(

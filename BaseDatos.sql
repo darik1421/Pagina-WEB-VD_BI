@@ -59,7 +59,7 @@ fecha_Estimada DATE
 
 CREATE TABLE Detalle_Venta(
 id_Detalleventa INT AUTO_INCREMENT PRIMARY KEY,
-cantidad_Venta INT,
+cantidad_Productos INT,
 precio_Venta DECIMAL (12,4),
 id_Producto INT,
 total_Venta DECIMAL (12,2),
