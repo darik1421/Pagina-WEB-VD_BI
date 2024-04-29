@@ -7,6 +7,29 @@ import { Alert } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+
+function formatearNumeroConComas(numero) {
+  // Verifica si el número es válido y no es NaN
+  if (!isNaN(numero) && Number.isFinite(numero)) {
+    // Convierte el número a un string y separa la parte entera de la decimal
+    const [parteEntera, parteDecimal] = String(numero).split('.');
+    
+    // Formatea la parte entera con comas cada tres dígitos
+    const parteEnteraFormateada = parteEntera.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    
+    // Une la parte entera formateada con la parte decimal, si existe
+    const numeroFormateado = parteDecimal ? `${parteEnteraFormateada}.${parteDecimal}` : parteEnteraFormateada;
+    
+    return numeroFormateado;
+  } else {
+    return ''; // Devuelve una cadena vacía si el número no es válido
+  }
+}
+
+
+
+
+
 function Gestionproducto({ rol }) {
   const [productos, setProductos] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -16,11 +39,14 @@ function Gestionproducto({ rol }) {
     presentacion: '',
     imagen: '',
     descripcion: '',
-    precio: '',
-    cantidad: '',
+    precio_Venta: '',
+    precio_Compra: '',
+    cantidad_Disponible: '',
     id_Marca: '',
     id_Categoria: '',
   });
+
+  
 
   const notifySuccess = (message) => {
     toast.success(message, {
@@ -123,8 +149,9 @@ const [deleteProductoId, setDeleteProductoId] = useState(null);
       presentacion: producto.presentacion,
       imagen: producto.imagen,
       descripcion: producto.descripcion,
-      precio: producto.precio,
-      cantidad: producto.cantidad,
+      precio_Venta: producto.precio_Venta,
+      precio_Compra: producto.precio_Compra,
+      cantidad_Disponible: producto.cantidad_Disponible,
       id_Marca: producto.id_Marca,
       id_Categoria: producto.id_Categoria,
     });
@@ -191,8 +218,9 @@ const [deleteProductoId, setDeleteProductoId] = useState(null);
     dataToSend.append('imagen', imageUrl ? imageUrl : formData.imagen);
 
     dataToSend.append('descripcion', formData.descripcion);
-    dataToSend.append('precio', formData.precio);
-    dataToSend.append('cantidad', formData.cantidad);
+    dataToSend.append('precio_Venta', formData.precio_Venta);
+    dataToSend.append('precio_Compra', formData.precio_Compra);
+    dataToSend.append('cantidad', formData.cantidad_Disponible);
     dataToSend.append('id_Marca', formData.id_Marca);
     dataToSend.append('id_Categoria', formData.id_Categoria);
 
@@ -211,8 +239,9 @@ const [deleteProductoId, setDeleteProductoId] = useState(null);
           presentacion: '',
           imagen: '',
           descripcion: '',
-          precio: '',
-          cantidad: '',
+          precio_Venta: '',
+          precio_Compra: '',
+          cantidad_Disponible: '',
           id_Marca: '',
           id_Categoria: '',
         });
@@ -302,6 +331,9 @@ const [deleteProductoId, setDeleteProductoId] = useState(null);
     });
     closeBrandModal();
   };
+  
+
+
 
 
   return (
@@ -344,8 +376,9 @@ const [deleteProductoId, setDeleteProductoId] = useState(null);
                   <th>Presentación</th>
                   <th>Imagen</th>
                   <th>Descripción</th>
-                  <th>Precio</th>
-                  <th>Cantidad</th>
+                  <th>Precio Venta</th>
+                  <th>Precio Compra</th>
+                  <th>Cantidad Disponible</th>
                   <th>Marca</th>
                   <th>Categoría</th>
                   <th>Acciones</th>
@@ -362,8 +395,9 @@ const [deleteProductoId, setDeleteProductoId] = useState(null);
 
                     </td>
                     <td>{producto.descripcion}</td>
-                    <td>C${formatearNumeroConComas(producto.precio)}</td>
-                    <td>{producto.cantidad}</td>
+                    <td>C${formatearNumeroConComas(producto.precio_Venta)}</td>
+                    <td>C${formatearNumeroConComas(producto.precio_Compra)}</td>
+                    <td>{producto.cantidad_Disponible}</td>
                     <td>{marcas.find((marca) => marca.id_Marca === producto.id_Marca)?.nombre_Marca}</td>
                     <td>{categorias.find((categoria) => categoria.id_Categoria === producto.id_Categoria)?.nombre_Categoria}</td>
                     <td>
@@ -463,12 +497,12 @@ const [deleteProductoId, setDeleteProductoId] = useState(null);
                     </FloatingLabel>
                   </Col>
                   <Col sm="12" md="6" lg="6">
-                    <FloatingLabel controlId="cantidad" label="Cantidad">
+                    <FloatingLabel controlId="cantidad_Disponible" label="Cantidad">
                       <Form.Control
                         type="text"
                         placeholder="Ingrese la cantidad"
-                        name="cantidad"
-                        value={formData.cantidad}
+                        name="cantidad_Disponible"
+                        value={formData.cantidad_Disponible}
                         onChange={handleFormChange}
                         onKeyDown={(e) => {
                           // Permitir solo números (0-9), retroceso y teclas de flecha
@@ -486,22 +520,23 @@ const [deleteProductoId, setDeleteProductoId] = useState(null);
                       />
                     </FloatingLabel>
                   </Col>
+
+
                   <Col sm="12" md="6" lg="6">
-                    <FloatingLabel controlId="precio">
+                    <FloatingLabel controlId="precioVenta" label="">
                       <div className="input-group">
-                        <span className="input-group-text">C$</span>
+                        <span className="input-group-text">C$ Venta</span>
                         <Form.Control
                           className="input-size"
                           type="text"
-                          value={formData.precio}
+                          value={formData.precio_Venta}
                           onChange={(e) => {
                             setFormData({
                               ...formData,
-                              precio: e.target.value,
+                              precio_Venta: e.target.value,
                             });
                           }}
                           onKeyDown={(e) => {
-                            // Permitir solo números (0-9), retroceso y teclas de flecha
                             if (
                               !(
                                 (e.key >= '0' && e.key <= '9') ||
@@ -517,6 +552,37 @@ const [deleteProductoId, setDeleteProductoId] = useState(null);
                       </div>
                     </FloatingLabel>
                   </Col>
+
+      <Col sm="12" md="6" lg="6">
+        <FloatingLabel controlId="precioCompra" label="">
+          <div className="input-group">
+            <span className="input-group-text">C$ Compra</span>
+            <Form.Control
+              className="input-size"
+              type="text"
+              value={formatearNumeroConComas(formData.precio_Compra)}
+              onChange={(e) => {
+                setFormData({
+                  ...formData,
+                  precio_Compra: e.target.value,
+                });
+              }}
+              onKeyDown={(e) => {
+                if (
+                  !(
+                    (e.key >= '0' && e.key <= '9') ||
+                    e.key === 'Backspace' ||
+                    e.key === 'ArrowLeft' ||
+                    e.key === 'ArrowRight'
+                  )
+                ) {
+                  e.preventDefault();
+                }
+              }}
+            />
+          </div>
+        </FloatingLabel>
+      </Col>
 
                   <Col sm="12" md="6" lg="6">
                     <FloatingLabel controlId="categoria" label="Categoría">

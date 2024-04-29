@@ -20,6 +20,7 @@ trimestre INTEGER NOT NULL
 
 CREATE TABLE D_Productos(
 id_Producto INTEGER AUTO_INCREMENT PRIMARY KEY,
+calificacion INTEGER,
 nombre_Producto VARCHAR (255) NOT NULL,
 nombre_Categoria VARCHAR (25) NOT NULL,
 nombre_Marca VARCHAR (25) NOT NULL,

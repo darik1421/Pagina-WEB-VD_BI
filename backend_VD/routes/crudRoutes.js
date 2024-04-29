@@ -15,7 +15,7 @@ router.get('/stock/:idProducto', (req, res) => {
   const idProducto = req.params.idProducto;
 
   // Realiza una consulta a la base de datos para obtener la cantidad de stock del producto
-  const stockQuery = 'SELECT cantidad FROM Productos WHERE id_Producto = ?';
+  const stockQuery = 'SELECT cantidad_Disponible FROM Productos WHERE id_Producto = ?';
 
   db.query(stockQuery, [idProducto], (error, results) => {
     if (error) {
@@ -154,7 +154,7 @@ router.get('/nombremarcas', (req, res) => {
 
     //Ruta para consultar Detalle compra
     router.get('/readDetalleVentas', (req, res) => {
-      const sql = 'SELECT detalle_venta.*, productos.nombre_Producto, productos.precio, productos.cantidad_Disponible, ventas.estado FROM detalle_venta INNER JOIN productos ON detalle_venta.id_Producto = productos.id_Producto INNER JOIN ventas ON detalle_venta.id_Venta = ventas.id_Venta';
+      const sql = 'SELECT detalle_venta.*, productos.nombre_Producto, productos.precio_Venta,productos.precio_Compra, productos.cantidad_Disponible, ventas.estado FROM detalle_venta INNER JOIN productos ON detalle_venta.id_Producto = productos.id_Producto INNER JOIN ventas ON detalle_venta.id_Venta = ventas.id_Venta';
     
       db.query(sql, (err, result) => {
         if (err) {
@@ -272,34 +272,36 @@ router.get('/nombremarcas', (req, res) => {
   //Ruta para insertar compras
 
 // Modificar la ruta /createcompras
-router.post('/createventas', (req, res) => {
-  const { estado, fecha_Estimada, detalle,precio_Venta} = req.body;
+router.post('/createventa', (req, res) => {
+  const { estado, fecha_Estimada, detalle, precio_Venta } = req.body;
   const fecha_Venta = new Date();
   const hora_Venta = new Date();
 
     // Insertar la compra
+    const sqlCompra = 'INSERT INTO ventas ( fecha_Venta, hora_Venta, estado, fecha_Estimada) VALUES (?, ?, ?, ?)';
     db.query(sqlCompra, [fecha_Venta, hora_Venta, estado, fecha_Estimada], (err, result) => {
       if (err) {
         console.error('Error al insertar venta:', err);
         return res.status(500).json({ error: 'Error al insertar venta' });
       }
 
-        const idVenta = result.insertId;
+    const idVenta = result.insertId;
 
-        // Insertar el detalle de compra
-        const sqlDetalle = 'INSERT INTO detalle_venta (cantidad_Venta,precio_Venta,id_Producto,id_Venta) VALUES ?';
-        const values = detalle.map((item) => [item.cantidad_Venta,precio_Venta,item.id_Producto,idVenta]);
-        db.query(sqlDetalle, [values], (err, result) => {
-          if (err) {
-            console.error('Error al insertar detalle de venta:', err);
-            return res.status(500).json({ error: 'Error al insertar detalle de venta' });
-          }
-  
-          // Devolver respuesta exitosa
-          res.status(201).json({ message: 'Venta y detalle de venta agregados con éxito' });
-        });
-      });
+    // Insertar el detalle de compra
+    const sqlDetalle = 'INSERT INTO detalle_venta (cantidad_Productos, precio_Venta, id_Producto, id_Venta) VALUES ?';
+    const values = detalle.map((item) => [item.cantidad_Productos, precio_Venta, item.id_Producto, idVenta]);
+    db.query(sqlDetalle, [values], (err, result) => {
+      if (err) {
+        console.error('Error al insertar detalle de venta:', err);
+        return res.status(500).json({ error: 'Error al insertar detalle de venta', details: err.message });
+      }
+
+      // Devolver respuesta exitosa
+      res.status(201).json({ message: 'Venta y detalle de venta agregados con éxito' });
     });
+  });
+});
+
   
 
 
@@ -337,16 +339,16 @@ router.post('/createventas', (req, res) => {
   // Ruta para insertar Producto
 
   router.post('/createproducto', (req, res) => {
-    const {nombre_Producto,presentacion,imagen,descripcion,precio,cantidad_Disponible,id_Marca,id_Categoria} = req.body;
+    const {nombre_Producto,presentacion,imagen,descripcion,precio_Venta,precio_Compra,cantidad_Disponible,id_Marca,id_Categoria} = req.body;
   
     // Verifica si se proporcionó el nombre del producto
-    if (!nombre_Producto ||!presentacion ||!imagen ||!descripcion ||!precio ||!cantidad_Disponible ||!id_Marca ||!id_Categoria) {
+    if (!nombre_Producto ||!presentacion ||!imagen ||!descripcion ||!precio_Venta ||!precio_Compra ||!cantidad_Disponible ||!id_Marca ||!id_Categoria) {
       return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
   
     // Consulta SQL para insertar una nuevo producto
-    const sql = 'INSERT INTO productos (nombre_Producto,presentacion,imagen,descripcion,precio,cantidad,id_Marca,id_Categoria) VALUES (?,?,?,?,?,?,?,?)';
-    const values = [nombre_Producto,presentacion,imagen,descripcion,precio,cantidad_Disponible,id_Marca,id_Categoria];
+    const sql = 'INSERT INTO productos (nombre_Producto,presentacion,imagen,descripcion,precio_Venta,precio_Compra,cantidad_Disponible,id_Marca,id_Categoria) VALUES (?,?,?,?,?,?,?,?,?)';
+    const values = [nombre_Producto,presentacion,imagen,descripcion,precio_Venta,precio_Compra,cantidad_Disponible,id_Marca,id_Categoria];
   
     // Ejecuta la consulta SQL
     db.query(sql, values, (err, result) => {
@@ -522,7 +524,7 @@ router.post('/createusuarios', (req, res) => {
         WHERE id_Detalleventa = ?
       `;
   
-      const values = [cantidad_Compra, precio_Compra, id_Producto, id_Compra,id];
+      const values = [cantidad_Venta, precio_Venta, id_Producto, id_Venta,id];
   
       // Ejecuta la consulta
       db.query(sql, values, (err, result) => {
@@ -579,16 +581,17 @@ router.post('/createusuarios', (req, res) => {
         nombre_Producto,
         presentacion,
         descripcion,
-        precio,
+        precio_Venta,
+        precio_Compra,
         cantidad_Disponible,
         id_Marca,
         id_Categoria,
       } = req.body;
       
-      // Verifica si se proporcionaron los datos necesarios
-      if (!nombre_Producto) {
+      if (!nombre_Producto || cantidad_Disponible === null || cantidad_Disponible === undefined) {
         return res.status(400).json({ error: 'Todos los campos son obligatorios' });
       }
+      
     
       let nuevaImagen = req.body.imagen; // Mantén la imagen existente por defecto
       
@@ -599,11 +602,11 @@ router.post('/createusuarios', (req, res) => {
     
       const sql = `
         UPDATE productos
-        SET nombre_Producto = ?, presentacion = ?, imagen = ?, descripcion = ?, precio = ?, cantidad_Disponible = ?, id_Marca = ?, id_Categoria = ?
+        SET nombre_Producto = ?, presentacion = ?, imagen = ?, descripcion = ?, precio_Venta = ?, precio_Compra = ?, cantidad_Disponible = ?, id_Marca = ?, id_Categoria = ?
         WHERE id_Producto = ?
       `;
       
-      const values = [nombre_Producto, presentacion, nuevaImagen, descripcion, precio, cantidad_Disponible, id_Marca, id_Categoria, id];
+      const values = [nombre_Producto, presentacion, nuevaImagen, descripcion, precio_Venta, precio_Compra, cantidad_Disponible, id_Marca, id_Categoria, id];
       
       db.query(sql, values, (err, result) => {
         if (err) {
@@ -806,7 +809,7 @@ router.post('/createusuarios', (req, res) => {
       const sql =`
       SELECT
       Categorias.nombre_Categoria,
-        COUNT(Productos.id_Producto) AS cantidad
+        COUNT(Productos.id_Producto) AS cantidad_Disponible
       FROM
       Productos
       INNER JOIN

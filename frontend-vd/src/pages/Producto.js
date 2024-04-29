@@ -13,8 +13,9 @@ function Producto({ rol }) {
   const [nombre_Producto, setNombre_Producto] = useState('');
   const [presentacion, setPresentacion] = useState('');
   const [descripcion, setDescripcion] = useState('');
-  const [precio, setPrecio] = useState('');
-  const [cantidad, setCantidad] = useState('');
+  const [precio_Venta, setPrecio_Venta] = useState('');
+  const [precio_Compra, setPrecio_Compra] = useState('');
+  const [cantidad_Disponible, setCantidad_Disponible] = useState('');
   const [formData, setFormData] = useState({
     id_Marca: '',
     id_Categoria: '',
@@ -39,8 +40,9 @@ function Producto({ rol }) {
     nombre_Producto: '',
     presentacion: '',
     descripcion: '',
-    precio: '',
-    cantidad: '',
+    precio_Venta: '',
+    precio_Compra: '',
+    cantidad_Disponible: '',
     marca: '',
     categoria: '',
   });
@@ -187,12 +189,16 @@ function Producto({ rol }) {
      errors.descripcion = 'Campo obligatorio' 
     }
 
-    if (!precio) {
-      errors.precio = 'Ingrese el precio';
+    if (!precio_Venta) {
+      errors.precio_Venta = 'Ingrese el precio Venta';
     }
 
-    if (!cantidad) {
-      errors.cantidad = 'Ingrese la cantidad';
+    if (!precio_Compra) {
+      errors.precio_Compra = 'Ingrese el precio Compra';
+    }
+
+    if (!cantidad_Disponible) {
+      errors.cantidad_Disponible = 'Ingrese la cantidad';
     }
 
     if (!formData.id_Marca) {
@@ -216,8 +222,9 @@ function Producto({ rol }) {
     dataToSend.append('presentacion', presentacion);
     dataToSend.append('imagen', imageUrl);
     dataToSend.append('descripcion', descripcion);
-    dataToSend.append('precio', precio);
-    dataToSend.append('cantidad', cantidad);
+    dataToSend.append('precio_Venta', precio_Venta);
+    dataToSend.append('precio_Compra', precio_Compra);
+    dataToSend.append('cantidad_Disponible', cantidad_Disponible);
     dataToSend.append('id_Marca', formData.id_Marca);
     dataToSend.append('id_Categoria', formData.id_Categoria);
 
@@ -235,8 +242,9 @@ function Producto({ rol }) {
         setNombre_Producto('');
         setPresentacion('');
         setDescripcion('');
-        setPrecio('');
-        setCantidad('');
+        setPrecio_Venta('');
+        setPrecio_Compra('');
+        setCantidad_Disponible('');
         setFormData({
           id_Marca: '',
           id_Categoria: '',
@@ -345,10 +353,21 @@ function Producto({ rol }) {
     return nombre_Categoria.includes(search);
   });
 
-  const handlePrecioChange = (e) => {
+  const handlePrecioVentaChange = (e) => {
     // Validar que solo se ingresen números no negativos
     const nuevoPrecio = e.target.value.replace(/[^0-9.]/g, ''); // Eliminar caracteres no numéricos, excepto el punto para decimales
-    setPrecio(nuevoPrecio);
+    setPrecio_Venta(nuevoPrecio);
+    if (!nuevoPrecio) {
+      setFormErrors({ ...formErrors, precio: 'Campo obligatorio' });
+    } else {
+      setFormErrors({ ...formErrors, precio: '' });
+    }
+  };
+
+  const handlePrecioCompraChange = (e) => {
+    // Validar que solo se ingresen números no negativos
+    const nuevoPrecio = e.target.value.replace(/[^0-9.]/g, ''); // Eliminar caracteres no numéricos, excepto el punto para decimales
+    setPrecio_Compra(nuevoPrecio);
     if (!nuevoPrecio) {
       setFormErrors({ ...formErrors, precio: 'Campo obligatorio' });
     } else {
@@ -359,7 +378,7 @@ function Producto({ rol }) {
   const handleCantidadChange = (e) => {
     // Validar que solo se ingresen números no negativos
     const nuevaCantidad = e.target.value.replace(/[^0-9]/g, ''); // Eliminar caracteres no numéricos
-    setCantidad(nuevaCantidad);
+    setCantidad_Disponible(nuevaCantidad);
     if (!nuevaCantidad) {
       setFormErrors({ ...formErrors, cantidad: 'Campo obligatorio' });
     } else {
@@ -503,32 +522,49 @@ function Producto({ rol }) {
                   </FloatingLabel>
                   {formErrors.descripcion && <div className="error-message">{formErrors.descripcion}</div>}
                 </Col>
+
                 <Col sm="12" md="6" lg="6">
-                  <FloatingLabel controlId="precio" label="">
+                  <FloatingLabel controlId="precio_Venta" label="">
                     <div className="input-group">
                       <span className="input-group-text">C$</span>
                       <Form.Control
                         className="input-size"
                         type="text" // Mantenido como tipo texto para permitir decimales
-                        placeholder="Ingrese el precio"
-                        value={precio}
-                        onChange={handlePrecioChange}
+                        placeholder="Ingrese el precio de venta"
+                        value={precio_Venta}
+                        onChange={handlePrecioVentaChange}
                       />
                     </div>
                   </FloatingLabel>
-                  {formErrors.precio && <div className="error-message">{formErrors.precio}</div>}
+                  {formErrors.precio && <div className="error-message">{formErrors.precio_Venta}</div>}
+                  </Col>
 
-                </Col>
+                  <Col sm="12" md="6" lg="6">
+                  <FloatingLabel controlId="precio_Compra" label="">
+                    <div className="input-group">
+                      <span className="input-group-text">C$</span>
+                      <Form.Control
+                        className="input-size"
+                        type="text" // Mantenido como tipo texto para permitir decimales
+                        placeholder="Ingrese el precio compra"
+                        value={precio_Compra}
+                        onChange={handlePrecioCompraChange}
+                      />
+                    </div>
+                  </FloatingLabel>
+                  {formErrors.precio && <div className="error-message">{formErrors.precio_Compra}</div>}
+                  </Col>
+
                 <Col sm="12" md="6" lg="6">
-                  <FloatingLabel controlId="cantidad" label="Cantidad">
+                  <FloatingLabel controlId="cantidad_Disponible" label="Cantidad">
                     <Form.Control
                       type="text" // Mantenido como tipo texto para permitir solo números enteros
                       placeholder="Ingrese la cantidad"
-                      value={cantidad}
+                      value={cantidad_Disponible}
                       onChange={handleCantidadChange}
                     />
                   </FloatingLabel>
-                  {formErrors.cantidad && <div className="error-message">{formErrors.cantidad}</div>}
+                  {formErrors.cantidad && <div className="error-message">{formErrors.cantidad_Disponible}</div>}
                 </Col>
                 <Col sm="12" md="6" lg="6">
                   <FloatingLabel controlId="marca" label="Marca">

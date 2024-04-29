@@ -5,20 +5,20 @@ import { FaSearch, FaTrashAlt, FaPlus } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function Detallecompra({ rol }) {
+function Detalleventa({ rol }) {
   const [productos, setProductos] = useState([]);
   const [estado, setEstado] = useState('');
   const [fecha_Estimada, setFechaEstimada] = useState('');
-  const [cantidad_Compra, setCantidadCompra] = useState('');
-  const [precio_Compra, setPrecioCompra] = useState('');
+  const [cantidad_Productos, setCantidadProductos] = useState('');
+  const [precio_Venta, setPrecioVenta] = useState('');
   const [id_Producto, setIdProducto] = useState('');
 
   const [formData, setFormData] = useState({
-    cantidad_Compra: '',
-    precio_Compra: '',
+    cantidad_Productos: '',
+    precio_Venta: '',
     id_Producto: '',
-    total_Compra: '',
-    id_Compra: '',
+    total_Venta: '',
+    id_Venta: '',
   });
 
   const notifySuccess = (message) => {
@@ -82,9 +82,9 @@ function Detallecompra({ rol }) {
 
   const getCurrentTime = () => {
     const now = new Date();
-    const fecha_compra = now.toISOString().split('T')[0];
-    const hora_compra = now.toTimeString().split(' ')[0];
-    return { fecha_compra, hora_compra };
+    const fecha_Venta = now.toISOString().split('T')[0];
+    const hora_Venta = now.toTimeString().split(' ')[0];
+    return { fecha_Venta, hora_Venta };
   };
 
   useEffect(() => {
@@ -98,8 +98,8 @@ function Detallecompra({ rol }) {
       errors.selectedProducto = 'Seleccione un producto';
     }
   
-    if (!cantidad_Compra.trim()) {
-      errors.cantidad_Compra = 'Ingrese una cantidad';
+    if (!cantidad_Productos.trim()) {
+      errors.cantidad_Productos = 'Ingrese una cantidad';
     }
   
     setFormErrors(errors);
@@ -109,15 +109,15 @@ function Detallecompra({ rol }) {
       return;
     }
   
-    if (selectedProducto && cantidad_Compra) {
+    if (selectedProducto && cantidad_Productos) {
       const nuevoDetalle = {
         id_Producto: selectedProducto.id_Producto,
         nombre_Producto: selectedProducto.nombre_Producto,
-        precio: selectedProducto.precio,
-        cantidad_Compra: cantidad_Compra,
+        precio_Venta: selectedProducto.precio_Venta,
+        cantidad_Productos: cantidad_Productos,
       };
       setDetallesVenta([...detallesVenta, nuevoDetalle]);
-      setCantidadCompra('');
+      setCantidadProductos('');
       setSelectedProducto(null);
     }
   };
@@ -151,16 +151,16 @@ if (!estado) {
  }
 
 
-    const { fecha_compra, hora_compra } = getCurrentTime(); // Obtener fecha y hora actuales
+    const { fecha_Venta, hora_Venta } = getCurrentTime(); // Obtener fecha y hora actuales
     if (estado && fecha_Estimada && detallesVenta.length > 0) {
       const data = {
-        fecha_compra: fecha_compra,
-        hora_compra: hora_compra,
+        fecha_Venta: fecha_Venta,
+        hora_Venta: hora_Venta,
         estado: estado,
         fecha_Estimada: fecha_Estimada,
         detalle: detallesVenta,
       };
-      fetch('http://localhost:5000/crud/createcompras', {
+      fetch('http://localhost:5000/crud/createventa', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -175,8 +175,8 @@ if (!estado) {
             setDetallesVenta([]);
             setFechaEstimada('');
             setEstado('');
-            setPrecioCompra('');
-            setCantidadCompra('');
+            setPrecioVenta('');
+            setCantidadProductos('');
             setIdProducto('');
           } else {
             console.error('Error al registrar la venta');
@@ -193,24 +193,20 @@ if (!estado) {
 
   const handleNEstadoChange = (e) => {
     const nuevoNombre = e.target.value.replace(/[^a-zA-Z ]/g, '');
-    if (!nuevoNombre.trim()) {
-      setFormErrors({ ...formErrors, estado: 'Ingrese un estado válido' });
-    } else {
-      setFormErrors({ ...formErrors, estado: '' });
-      setEstado(nuevoNombre);
-    }
+    setEstado(nuevoNombre); // Actualiza el estado con el valor filtrado
   };
+    
   
   const handleCantidadChange = (e) => {
     const nuevaCantidad = e.target.value;
   
     // Verificar si el evento es un retroceso (backspace)
     if (e.nativeEvent.inputType === 'deleteContentBackward' && nuevaCantidad.length === 0) {
-      setCantidadCompra('');
+      setCantidadProductos('');
     } else {
       // Validar que solo se ingresen números no negativos
       const nuevoValor = nuevaCantidad.replace(/[^0-9]/g, '');
-      setCantidadCompra(nuevoValor);
+      setCantidadProductos(nuevoValor);
     }
   };
 
@@ -286,11 +282,11 @@ if (!estado) {
                 </Col>
 
                 <Col sm="12" md="4" lg="4">
-                  <FloatingLabel controlId="cantidad_Compra" label="Cantidad del producto seleccionado">
+                  <FloatingLabel controlId="cantidad_Productos" label="Cantidad del producto seleccionado">
                     <Form.Control
                       type="text"
-                      placeholder="Ingrese la cantidad de compra"
-                      value={cantidad_Compra}
+                      placeholder="Ingrese la cantidad de Venta"
+                      value={cantidad_Productos}
                       onChange={handleCantidadChange}
                     />
                        <div className="button-container">
@@ -323,9 +319,9 @@ if (!estado) {
                             <tr key={detalle.idProducto}>
                               <td>{detalle.id_Producto}</td>
                               <td>{detalle.nombre_Producto}</td>
-                              <td>C${formatearNumeroConComas(detalle.precio)}</td>
-                              <td>{detalle.cantidad_Compra}</td>
-                              <td>C${formatearNumeroConComas(detalle.cantidad_Compra * detalle.precio)}</td>
+                              <td>C${formatearNumeroConComas(detalle.precio_Venta)}</td>
+                              <td>{detalle.cantidad_Productos}</td>
+                              <td>C${formatearNumeroConComas(detalle.cantidad_Productos* detalle.precio_Venta)}</td>
                               <td className="align-button">
                                 <Button
                                   size="sm"
@@ -388,4 +384,4 @@ if (!estado) {
   );
 }
 
-export default Detallecompra;
+export default Detalleventa;

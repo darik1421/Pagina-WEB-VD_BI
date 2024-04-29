@@ -191,7 +191,7 @@ function Catalogo({ rol,id_Usuario}) {
                     {producto.descripcion}
                   </Card.Text>
                   <div className="product-details">
-                    <div className="product-price">C$ {producto.precio.toFixed(2)}</div>
+                    <div className="product-price">C$ {producto.precio_Venta.toFixed(2)}</div>
                     <Badge bg="warning" text="dark">
                       {/* Puedes agregar contenido a esta insignia si es necesario */}
                     </Badge>

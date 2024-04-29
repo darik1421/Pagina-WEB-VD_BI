@@ -14,7 +14,6 @@ import Comentario from './pages/Comentario';
 import Gestioncomentario from './pages/Gestioncomentario';
 import Login from './pages/Login';
 import Detalleventa from './pages/Detalleventa';
-import Catalogo from './pages/Catalogo';
 import Estadistica from './pages/Estadistica';
 import GestionDetalle from './pages/GestionDetalleventa';
 import SinAcceso from './pages/SinAcceso';
@@ -50,7 +49,6 @@ function App() {
         <Route path="/Comentario" element={userRol ? <Comentario rol={userRol}/> : <Navigate to="/SinAcceso" />} />
         <Route path="/Gestioncomentario" element={userRol ? <Gestioncomentario rol={userRol}/> : <Navigate to="/SinAcceso" />} />
         <Route path="/Detalleventa" element={userRol ? <Detalleventa rol={userRol} /> : <Navigate to="/SinAcceso" />} />
-        <Route path="/Catalogo" element={userRol ? <Catalogo rol={userRol} id_Usuario={id_Usuario} /> : <Navigate to="/SinAcceso" />} />
         <Route path="/Estadistica" element={userRol ? <Estadistica rol={userRol} /> : <Navigate to="/SinAcceso" />} />
         <Route path="/GestionDetalleventa" element={userRol ? <GestionDetalle rol={userRol} /> : <Navigate to="/SinAcceso" />} />
         <Route path="/SinAcceso" element={<SinAcceso />} />
