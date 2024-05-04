@@ -8,26 +8,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
-function formatearNumeroConComas(numero) {
-  // Verifica si el número es válido y no es NaN
-  if (!isNaN(numero) && Number.isFinite(numero)) {
-    // Convierte el número a un string y separa la parte entera de la decimal
-    const [parteEntera, parteDecimal] = String(numero).split('.');
-    
-    // Formatea la parte entera con comas cada tres dígitos
-    const parteEnteraFormateada = parteEntera.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    
-    // Une la parte entera formateada con la parte decimal, si existe
-    const numeroFormateado = parteDecimal ? `${parteEnteraFormateada}.${parteDecimal}` : parteEnteraFormateada;
-    
-    return numeroFormateado;
-  } else {
-    return ''; // Devuelve una cadena vacía si el número no es válido
-  }
-}
-
-
-
 
 
 function Gestionproducto({ rol }) {
@@ -220,7 +200,7 @@ const [deleteProductoId, setDeleteProductoId] = useState(null);
     dataToSend.append('descripcion', formData.descripcion);
     dataToSend.append('precio_Venta', formData.precio_Venta);
     dataToSend.append('precio_Compra', formData.precio_Compra);
-    dataToSend.append('cantidad', formData.cantidad_Disponible);
+    dataToSend.append('cantidad_Disponible', formData.cantidad_Disponible);
     dataToSend.append('id_Marca', formData.id_Marca);
     dataToSend.append('id_Categoria', formData.id_Categoria);
 
@@ -522,36 +502,24 @@ const [deleteProductoId, setDeleteProductoId] = useState(null);
                   </Col>
 
 
-                  <Col sm="12" md="6" lg="6">
-                    <FloatingLabel controlId="precioVenta" label="">
-                      <div className="input-group">
-                        <span className="input-group-text">C$ Venta</span>
-                        <Form.Control
-                          className="input-size"
-                          type="text"
-                          value={formData.precio_Venta}
-                          onChange={(e) => {
-                            setFormData({
-                              ...formData,
-                              precio_Venta: e.target.value,
-                            });
-                          }}
-                          onKeyDown={(e) => {
-                            if (
-                              !(
-                                (e.key >= '0' && e.key <= '9') ||
-                                e.key === 'Backspace' ||
-                                e.key === 'ArrowLeft' ||
-                                e.key === 'ArrowRight'
-                              )
-                            ) {
-                              e.preventDefault();
-                            }
-                          }}
-                        />
-                      </div>
-                    </FloatingLabel>
-                  </Col>
+                   <Col sm="12" md="6" lg="6">
+        <FloatingLabel controlId="precioVenta" label="">
+          <div className="input-group">
+            <span className="input-group-text">C$ Venta</span>
+            <Form.Control
+              className="input-size"
+              type="text"
+              value={formData.precio_Venta}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (/^\d*\.?\d*$/.test(value)) {
+                  setFormData({ ...formData, precio_Venta: value });
+                }
+              }}
+            />
+          </div>
+        </FloatingLabel>
+      </Col>
 
       <Col sm="12" md="6" lg="6">
         <FloatingLabel controlId="precioCompra" label="">
@@ -560,23 +528,11 @@ const [deleteProductoId, setDeleteProductoId] = useState(null);
             <Form.Control
               className="input-size"
               type="text"
-              value={formatearNumeroConComas(formData.precio_Compra)}
+              value={formData.precio_Compra}
               onChange={(e) => {
-                setFormData({
-                  ...formData,
-                  precio_Compra: e.target.value,
-                });
-              }}
-              onKeyDown={(e) => {
-                if (
-                  !(
-                    (e.key >= '0' && e.key <= '9') ||
-                    e.key === 'Backspace' ||
-                    e.key === 'ArrowLeft' ||
-                    e.key === 'ArrowRight'
-                  )
-                ) {
-                  e.preventDefault();
+                const value = e.target.value;
+                if (/^\d*\.?\d*$/.test(value)) {
+                  setFormData({ ...formData, precio_Compra: value });
                 }
               }}
             />
