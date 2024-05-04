@@ -2,14 +2,14 @@ CREATE DATABASE TablaHechos;
 USE TablaHechos;
 
 CREATE TABLE D_Usuarios(
-id_Usuario INTEGER AUTO_INCREMENT PRIMARY KEY,
+id_Usuario INTEGER KEY,
 nombre_Usuario VARCHAR (25) NOT NULL,
 genero VARCHAR (9) NOT NULL,
 fecha_Nacimiento DATE
 );
 
 CREATE TABLE D_Tiempos(
-id_Tiempo INTEGER AUTO_INCREMENT PRIMARY KEY,
+id_Tiempo INTEGER PRIMARY KEY,
 fecha DATE NOT NULL,
 ano INTEGER NOT NULL,
 mes INTEGER NOT NULL,
@@ -19,7 +19,7 @@ trimestre INTEGER NOT NULL
 );
 
 CREATE TABLE D_Productos(
-id_Producto INTEGER AUTO_INCREMENT PRIMARY KEY,
+id_Producto INTEGER PRIMARY KEY,
 calificacion INTEGER,
 nombre_Producto VARCHAR (255) NOT NULL,
 nombre_Categoria VARCHAR (25) NOT NULL,
@@ -29,7 +29,7 @@ precio DECIMAL (12,4) NOT NULL
 );
 
 CREATE TABLE H_Ventas(
-id_Venta INTEGER AUTO_INCREMENT PRIMARY KEY,
+id_Venta INTEGER PRIMARY KEY,
 id_Usuario INTEGER,
 CONSTRAINT FK_VENTAS_ClIENTE FOREIGN KEY (id_Usuario) REFERENCES D_Usuarios (id_Usuario),
 id_Tiempo INTEGER,
