@@ -52,6 +52,8 @@ CONSTRAINT FK_Comentario_Producto FOREIGN KEY (id_Producto) REFERENCES Productos
 
 CREATE TABLE Ventas(
 id_Venta INT AUTO_INCREMENT PRIMARY KEY,
+id_Usuario INT,
+CONSTRAINT FK_Ventas_Usuario FOREIGN KEY (id_Usuario) REFERENCES Usuarios(id_Usuario),
 fecha_Venta DATE,
 hora_Venta TIME,
 estado VARCHAR(15),
