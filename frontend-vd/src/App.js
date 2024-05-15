@@ -48,7 +48,7 @@ function App() {
         <Route path="/Gestionusuario" element={userRol ? <Gestionusuario rol={userRol}/> : <Navigate to="/SinAcceso" />} />
         <Route path="/Comentario" element={userRol ? <Comentario rol={userRol}/> : <Navigate to="/SinAcceso" />} />
         <Route path="/Gestioncomentario" element={userRol ? <Gestioncomentario rol={userRol}/> : <Navigate to="/SinAcceso" />} />
-        <Route path="/Detalleventa" element={userRol ? <Detalleventa rol={userRol} /> : <Navigate to="/SinAcceso" />} />
+        <Route path="/Detalleventa" element={userRol ? <Detalleventa rol={userRol} id_Usuario={id_Usuario} /> : <Navigate to="/SinAcceso" />} />
         <Route path="/Estadistica" element={userRol ? <Estadistica rol={userRol} /> : <Navigate to="/SinAcceso" />} />
         <Route path="/GestionDetalleventa" element={userRol ? <GestionDetalle rol={userRol} /> : <Navigate to="/SinAcceso" />} />
         <Route path="/SinAcceso" element={<SinAcceso />} />

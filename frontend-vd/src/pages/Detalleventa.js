@@ -5,7 +5,7 @@ import { FaSearch, FaTrashAlt, FaPlus } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function Detalleventa({ rol }) {
+function Detalleventa({ rol,id_Usuario }) {
   const [productos, setProductos] = useState([]);
   const [estado, setEstado] = useState('');
   const [fecha_Estimada, setFechaEstimada] = useState('');
@@ -14,6 +14,7 @@ function Detalleventa({ rol }) {
   const [id_Producto, setIdProducto] = useState('');
 
   const [formData, setFormData] = useState({
+    id_Usuario: '',
     cantidad_Productos: '',
     precio_Venta: '',
     id_Producto: '',
@@ -132,6 +133,7 @@ function Detalleventa({ rol }) {
  // Validar campos vacíos
  const errors = {};
 
+ console.log('Valor de id_Usuario:', id_Usuario); // Verifica el valor de id_Usuario aquí
 
 
 if (!fecha_Estimada) {
@@ -152,8 +154,9 @@ if (!estado) {
 
 
     const { fecha_Venta, hora_Venta } = getCurrentTime(); // Obtener fecha y hora actuales
-    if (estado && fecha_Estimada && detallesVenta.length > 0) {
+    if (id_Usuario,estado && fecha_Estimada && detallesVenta.length > 0) {
       const data = {
+        id_Usuario: id_Usuario,
         fecha_Venta: fecha_Venta,
         hora_Venta: hora_Venta,
         estado: estado,

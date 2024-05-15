@@ -273,13 +273,13 @@ router.get('/nombremarcas', (req, res) => {
 
 // Modificar la ruta /createcompras
 router.post('/createventa', (req, res) => {
-  const { estado, fecha_Estimada, detalle, precio_Venta } = req.body;
+  const { id_Usuario,estado, fecha_Estimada, detalle} = req.body;
   const fecha_Venta = new Date();
   const hora_Venta = new Date();
 
     // Insertar la compra
-    const sqlCompra = 'INSERT INTO ventas ( fecha_Venta, hora_Venta, estado, fecha_Estimada) VALUES (?, ?, ?, ?)';
-    db.query(sqlCompra, [fecha_Venta, hora_Venta, estado, fecha_Estimada], (err, result) => {
+    const sqlCompra = 'INSERT INTO ventas ( id_Usuario,fecha_Venta, hora_Venta, estado, fecha_Estimada) VALUES (?, ?, ?, ?, ?)';
+    db.query(sqlCompra, [id_Usuario,fecha_Venta, hora_Venta, estado, fecha_Estimada], (err, result) => {
       if (err) {
         console.error('Error al insertar venta:', err);
         return res.status(500).json({ error: 'Error al insertar venta' });
@@ -289,7 +289,7 @@ router.post('/createventa', (req, res) => {
 
     // Insertar el detalle de compra
     const sqlDetalle = 'INSERT INTO detalle_venta (cantidad_Productos, precio_Venta, id_Producto, id_Venta) VALUES ?';
-    const values = detalle.map((item) => [item.cantidad_Productos, precio_Venta, item.id_Producto, idVenta]);
+    const values = detalle.map((item) => [item.cantidad_Productos, item.precio_Venta, item.id_Producto, idVenta]);
     db.query(sqlDetalle, [values], (err, result) => {
       if (err) {
         console.error('Error al insertar detalle de venta:', err);
