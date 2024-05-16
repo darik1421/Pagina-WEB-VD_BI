@@ -17,6 +17,7 @@ import Detalleventa from './pages/Detalleventa';
 import Estadistica from './pages/Estadistica';
 import GestionDetalle from './pages/GestionDetalleventa';
 import SinAcceso from './pages/SinAcceso';
+import RegistroUsuario from './pages/RegistroUsuario';
 
 function App() {
 
@@ -50,6 +51,7 @@ function App() {
         <Route path="/Gestioncomentario" element={userRol ? <Gestioncomentario rol={userRol}/> : <Navigate to="/SinAcceso" />} />
         <Route path="/Detalleventa" element={userRol ? <Detalleventa rol={userRol} id_Usuario={id_Usuario} /> : <Navigate to="/SinAcceso" />} />
         <Route path="/Estadistica" element={userRol ? <Estadistica rol={userRol} /> : <Navigate to="/SinAcceso" />} />
+        <Route path="/RegistroUsuario" element={userRol ? <RegistroUsuario rol={userRol} /> : <Navigate to="/SinAcceso" />} />
         <Route path="/GestionDetalleventa" element={userRol ? <GestionDetalle rol={userRol} /> : <Navigate to="/SinAcceso" />} />
         <Route path="/SinAcceso" element={<SinAcceso />} />
       </Routes>
