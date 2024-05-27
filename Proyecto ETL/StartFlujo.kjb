@@ -19,7 +19,7 @@
     <database>tablahechos</database>
     <port>3306</port>
     <username>root</username>
-    <password>Encrypted 2be98afc86aa7f2e4a80ba7638cc2ff8e</password>
+    <password>Encrypted 2be98afc86aa7f2e4cb79ff238ec4ff8f</password>
     <servername/>
     <data_tablespace/>
     <index_tablespace/>
@@ -378,7 +378,7 @@
       <attributes/>
       <specification_method>filename</specification_method>
       <trans_object_id/>
-      <filename>C:\Users\Cris\Desktop\Pruevas ETL\Dim_Tiempo.ktr</filename>
+      <filename>C:/Users/Darikson/Desktop/Pagina-WEB-VD_BI/Proyecto ETL/Dim_Tiempo.ktr</filename>
       <transname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -417,7 +417,7 @@
       <attributes/>
       <specification_method>filename</specification_method>
       <trans_object_id/>
-      <filename>C:\Users\Cris\Desktop\Pruevas ETL\Dim_Usuario.ktr</filename>
+      <filename>C:/Users/Darikson/Desktop/Pagina-WEB-VD_BI/Proyecto ETL/Dim_Usuario.ktr</filename>
       <transname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -456,7 +456,7 @@
       <attributes/>
       <specification_method>filename</specification_method>
       <trans_object_id/>
-      <filename>C:\Users\Cris\Desktop\Pruevas ETL\Dim_Producto.ktr</filename>
+      <filename>C:/Users/Darikson/Desktop/Pagina-WEB-VD_BI/Proyecto ETL/Dim_Producto.ktr</filename>
       <transname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -513,7 +513,7 @@
       <attributes/>
       <specification_method>filename</specification_method>
       <trans_object_id/>
-      <filename>C:/Users/Cris/Desktop/Pruevas ETL/Dim_Venta.ktr</filename>
+      <filename>C:/Users/Darikson/Desktop/Pagina-WEB-VD_BI/Proyecto ETL/Dim_Venta.ktr</filename>
       <transname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>

@@ -6,6 +6,7 @@ import Chart from 'chart.js/auto';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import html2canvas from 'html2canvas';
 
+
 function Estadisticas({ rol }) {
   const [compras, setCompras] = useState([]);
   const [myChart, setMyChart] = useState(null);
@@ -18,6 +19,8 @@ function Estadisticas({ rol }) {
     return numeroFormateado.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }  
 
+
+  
     //Apartado de estadistica de pastel
   useEffect(()=> {
     fetch('http://localhost:5000/crud/productosPorCategoria')
@@ -255,10 +258,36 @@ function Estadisticas({ rol }) {
       console.error('Error al generar el reporte con imagen:', error);
     }
   };
+  const imprimirEstadisticas = () => {
+    console.log("Imprimiendo estadísticas...");
+  }
 
   return (
     <div>
       <Header rol={rol} />
+
+
+      <Container className="margen-conten" responsive>
+
+        <Row className="g-3">
+
+          <Col sm="12" md="12" lg="12">
+            <Card>
+              <Card.Body>
+                <Card.Title>Estado del almacen</Card.Title>
+
+                <iframe title="REPORTE KARDEX" width="1024" height="804" src="https://app.powerbi.com/view?r=eyJrIjoiYzJhY2RhOTEtMGIzNy00ZjE2LWFlZGYtZTVmOThjNjY0Yzk2IiwidCI6ImU0NzY0NmZlLWRhMjctNDUxOC04NDM2LTVmOGIxNThiYTEyNyIsImMiOjR9" frameborder="0" allowFullScreen="true"></iframe>
+
+                <Button onClick={imprimirEstadisticas}>
+                  Generar reporte con imagen
+                </Button>
+              </Card.Body>
+            </Card>
+          </Col>
+
+        </Row>
+      </Container>
+
 
       <Container className="mt-8">
         <Row className="global-margin-top-history">
@@ -322,6 +351,7 @@ function Estadisticas({ rol }) {
         </Row>
       </Container>
 
+    
     </div>
   );
 }
