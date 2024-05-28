@@ -25,6 +25,23 @@ db.connect((err) => {
   }
 });
 
+// Configuración de la conexión a la segunda base de datos
+const db2 = mysql.createConnection({
+  host: 'localhost',
+  user: 'Devloper',
+  password: 'dev2023',
+  database: 'tablahechos'
+});
+
+db2.connect((err) => {
+  if (err) {
+      console.error('Error de conexión a la segunda base de datos:', err);
+  } else {
+      console.log('Conexión exitosa a la segunda base de datos');
+  }
+});
+
+
 app.use(cors());
 
 // Configura el almacenamiento para los archivos subidos
@@ -68,6 +85,11 @@ app.use(cors());
 // importar y usar rutas CRUD
 const crudRoutes = require('./routes/crudRoutes.js')(db);
 app.use('/crud', crudRoutes);
+
+// Importar y usar rutas para la segunda base de datos
+const crudRoutesDb2 = require('./routes/crudRoutesDb2')(db2); // Pasa la instancia de la segunda base de datos a crudRoutesDb2
+app.use('/crudDb2', crudRoutesDb2);
+
 
 // Iniciar el servidor
 app.listen(port, () => {
