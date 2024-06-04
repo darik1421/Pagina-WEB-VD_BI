@@ -11,9 +11,9 @@ app.use(express.json({ limit: '50mb'}));
 
 //configuracion de la conexion a la base de datos
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'Devloper',
-  password: 'dev2023',
+  host: '',
+  user: 'root',
+  password: 'cris2004',
   database: 'variedadesduarte',
 });
 
@@ -28,8 +28,8 @@ db.connect((err) => {
 // Configuración de la conexión a la segunda base de datos
 const db2 = mysql.createConnection({
   host: 'localhost',
-  user: 'Devloper',
-  password: 'dev2023',
+  user: 'root',
+  password: 'cris2004',
   database: 'tablahechos'
 });
 

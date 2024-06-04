@@ -13,6 +13,12 @@ function Estadisticas({ rol }) {
   const [myChart2, setMyChart2] = useState(null);
   const [categoryChart, setCategoryChart] = useState(null);
   const [productosPorCategoria, setProductosPorCategoria] = useState([]);
+  const [ventasPorAnio,setVentasPorAnio] = useState([]);
+  const [ventasPorAnioChart,setVentasPorAnioChart] = useState(null);
+  const [ventasTotalesmesanio,setVentasTotalesmesanio] = useState([]);
+  const [ventasTotalesmesanioChart,setVentasTotalesmesanioChart] = useState(null);
+  const [ventasTotalesmesespecifico,setVentasTotalesmesespecifico] = useState([]);
+  const [ventasTotalesmesespecificoChart,setVentasTotalesmesespecificoChart] = useState(null)
 
   function formatearNumeroConComas(numero) {
     const numeroFormateado = Number(numero).toFixed(2);
@@ -86,6 +92,137 @@ function Estadisticas({ rol }) {
 
 
   useEffect(() => {
+    fetch('http://localhost:5000/crudDb2/VentasTotalesanio')
+      .then((response) => response.json())
+      .then((data) => setVentasPorAnio(data))
+      .catch((error) => console.error('Error al obtener las ventas totales por año:', error));
+  }, []);
+  
+  useEffect(() => {
+    if (ventasPorAnio.length > 0) {
+      const ctx = document.getElementById('ventasPorAnioChart');
+  
+      if (ventasPorAnioChart !== null) {
+        ventasPorAnioChart.destroy();
+      }
+  
+      const anios = ventasPorAnio.map((venta) => venta.anio);
+      const ventasTotales = ventasPorAnio.map((venta) => venta.Ventas_totales);
+  
+      const ventas = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: anios,
+          datasets: [{
+            label: 'Ventas totales por año',
+            data: ventasTotales,
+            backgroundColor: 'rgba(0, 128, 0, 0.5)',
+            borderColor: 'rgba(0, 128, 0, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+      setVentasPorAnioChart(ventas);
+    }
+  }, [ventasPorAnio]);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/crudDb2/VentasTotalesmesanio')
+      .then((response) => response.json())
+      .then((data) => setVentasTotalesmesanio(data))
+      .catch((error) => console.error('Error al obtener las ventas totales por mes y año:', error));
+  }, []);
+  
+  useEffect(() => {
+    if (ventasTotalesmesanio.length > 0) {
+      const ctx = document.getElementById('ventasTotalesmesanioChart');
+  
+      if (ventasTotalesmesanioChart !== null) {
+        ventasTotalesmesanioChart.destroy();
+      }
+  
+      const dias = ventasTotalesmesanio.map((venta) => venta.dia);
+      const ventasTotales = ventasTotalesmesanio.map((venta) => venta.Ventas_totales);
+  
+      const ventasMesAnio = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: dias,
+          datasets: [{
+            label: 'Ventas totales por día',
+            data: ventasTotales,
+            backgroundColor: 'rgba(0, 128, 0, 0.5)',
+            borderColor: 'rgba(0, 128, 0, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+      setVentasTotalesmesanioChart(ventasMesAnio);
+    }
+  }, [ventasTotalesmesanio]);
+
+
+  useEffect(() => {
+    fetch('http://localhost:5000/crudDb2/VentasTotalesmesespecifico')
+      .then((response) => response.json())
+      .then((data) => setVentasTotalesmesespecifico(data))
+      .catch((error) => console.error('Error al obtener las ventas totales por trimestre:', error));
+  }, []);
+  
+  useEffect(() => {
+    if (ventasTotalesmesespecifico.length > 0) {
+      const ctx = document.getElementById('ventasTotalesmesespecificoChart');
+  
+      if (ventasTotalesmesespecificoChart !== null) {
+        ventasTotalesmesespecificoChart.destroy();
+      }
+  
+      const trimestres = ventasTotalesmesespecifico.map((venta) => venta.trimestre);
+      const ventasTotales = ventasTotalesmesespecifico.map((venta) => venta.Ventas_totales);
+  
+      const ventasTrimestre = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: trimestres,
+          datasets: [{
+            label: 'Ventas totales por trimestre',
+            data: ventasTotales,
+            backgroundColor: 'rgba(0, 128, 0, 0.5)',
+            borderColor: 'rgba(0, 128, 0, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+      setVentasTotalesmesespecificoChart(ventasTrimestre);
+    }
+  }, [ventasTotalesmesespecifico]);
+  
+  
+  
+
+
+  useEffect(() => {
     fetch('http://localhost:5000/crud/readDetalleCompras')
       .then((response) => response.json())
       .then((data) => setCompras(data))
@@ -127,6 +264,7 @@ function Estadisticas({ rol }) {
     }
   }, [compras]);
 
+ 
   useEffect(() => {
     if (compras.length > 0) {
       const ctx = document.getElementById('myChart');
@@ -161,6 +299,7 @@ function Estadisticas({ rol }) {
       setMyChart(almacen);
     }
   }, [compras]);
+  
 
   const generarReporteCompras = () => {
     fetch('http://localhost:5000/crud/readDetalleCompras')
@@ -310,6 +449,10 @@ function Estadisticas({ rol }) {
               </Card.Footer>
             </Card>
           </Col>
+
+
+        
+
     
           <Col md={6}>
             <Card>
@@ -346,6 +489,55 @@ function Estadisticas({ rol }) {
           </Card.Body>
         </Card>
   </Col>
+
+
+  <Col sm="6" md="6" lg="6">
+        <Card>
+          <Card.Body>
+            <Card.Title>Ventas totales por año</Card.Title>
+            <canvas id="ventasPorAnioChart" height="120"></canvas>         
+          </Card.Body>
+
+          <Card.Body>
+            <Button onClick={generarReporteAlmacen}>
+              Generar PDF
+            </Button>
+          </Card.Body>
+        </Card>
+  </Col>
+
+
+  <Col sm="6" md="6" lg="6">
+        <Card>
+          <Card.Body>
+            <Card.Title>Ventas totales por mes</Card.Title>
+            <canvas id="ventasTotalesmesanioChart" height="120"></canvas>         
+          </Card.Body>
+
+          <Card.Body>
+            <Button onClick={generarReporteAlmacen}>
+              Generar PDF
+            </Button>
+          </Card.Body>
+        </Card>
+  </Col>
+
+
+  <Col sm="6" md="6" lg="6">
+        <Card>
+          <Card.Body>
+            <Card.Title>Ventas totales por mes especifico</Card.Title>
+            <canvas id="ventasTotalesmesespecificoChart" height="120"></canvas>         
+          </Card.Body>
+
+          <Card.Body>
+            <Button onClick={generarReporteAlmacen}>
+              Generar PDF
+            </Button>
+          </Card.Body>
+        </Card>
+  </Col>
+      
       
 
         </Row>
