@@ -19,7 +19,18 @@ function Estadisticas({ rol }) {
   const [ventasTotalesmesanioChart,setVentasTotalesmesanioChart] = useState(null);
   const [ventasTotalesmesespecifico,setVentasTotalesmesespecifico] = useState([]);
   const [ventasTotalesmesespecificoChart,setVentasTotalesmesespecificoChart] = useState(null)
-
+  const [ventasTotalesproducto,setVentasTotalesproducto] = useState([]);
+  const [ventasTotalesproductoChart,setVentasTotalesproductoChart] = useState(null)
+  const [ventasTotalescategoria,setVentasTotalescategoria] = useState([]);
+  const [ventasTotalescategoriaChart,setVentasTotalescategoriaChart] = useState(null);
+  const [ventasTotalestrimestre,setVentasTotalestrimestre] = useState([]);
+  const [ventasTotalestrimestreChart,setVentasTotalestrimestreChart] = useState(null);
+  const [ventasTotalespromedioproducto, setVentasTotalespromedioproducto] = useState([]);
+  const [ventasTotalespromedioproductoChart, setVentasTotalespromedioproductoChart] = useState(null);
+  const [ventasTotalesproductomes, setVentasTotalesproductomes] = useState([]);
+  const [ventasTotalesproductomesChart, setVentasTotalesproductomesChart] = useState(null);
+  const [ventasTotalestop5producto, setVentasTotalestop5producto] = useState([]);
+  const [ventasTotalestop5productoChart, setVentasTotalestop5productoChart] = useState(null);
   function formatearNumeroConComas(numero) {
     const numeroFormateado = Number(numero).toFixed(2);
     return numeroFormateado.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -44,7 +55,7 @@ function Estadisticas({ rol }) {
       }
 
       const labels = productosPorCategoria.map((Categoria) => Categoria.nombre_Categoria); 
-      const data = productosPorCategoria.map((Categoria) => Categoria.cantidad);
+      const data = productosPorCategoria.map((Categoria) => Categoria.cantidad_Disponible);
 
       const categorias = new Chart(ctx,{
         type:'pie',
@@ -217,13 +228,277 @@ function Estadisticas({ rol }) {
       setVentasTotalesmesespecificoChart(ventasTrimestre);
     }
   }, [ventasTotalesmesespecifico]);
+
+
+  useEffect(() => {
+    fetch('http://localhost:5000/crudDb2/VentasTotalesproducto')
+      .then((response) => response.json())
+      .then((data) => setVentasTotalesproducto(data))
+      .catch((error) => console.error('Error al obtener las ventas totales por producto:', error));
+  }, []);
+  
+  useEffect(() => {
+    if (ventasTotalesproducto.length > 0) {
+      const ctx = document.getElementById('ventasTotalesproductoChart');
+  
+      if (ventasTotalesproductoChart !== null) {
+        ventasTotalesproductoChart.destroy();
+      }
+  
+      const productos = ventasTotalesproducto.map((venta) => venta.nombre_Producto);
+      const ventasTotales = ventasTotalesproducto.map((venta) => venta.Ventas_totales);
+  
+      const ventasProducto = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: productos,
+          datasets: [{
+            label: 'Ventas totales por producto',
+            data: ventasTotales,
+            backgroundColor: 'rgba(0, 128, 0, 0.5)',
+            borderColor: 'rgba(0, 128, 0, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+      setVentasTotalesproductoChart(ventasProducto);
+    }
+  }, [ventasTotalesproducto]);
+
+
+
+  useEffect(() => {
+    fetch('http://localhost:5000/crudDb2/VentasTotalescategoria')
+      .then((response) => response.json())
+      .then((data) => setVentasTotalescategoria(data))
+      .catch((error) => console.error('Error al obtener las ventas totales por categoría:', error));
+  }, []);
+  
+  useEffect(() => {
+    if (ventasTotalescategoria.length > 0) {
+      const ctx = document.getElementById('ventasTotalescategoriaChart');
+  
+      if (ventasTotalescategoriaChart !== null) {
+        ventasTotalescategoriaChart.destroy();
+      }
+  
+      const categorias = ventasTotalescategoria.map((venta) => venta.nombre_Categoria);
+      const ventasTotales = ventasTotalescategoria.map((venta) => venta.Ventas_Totales);
+  
+      const ventasCategoria = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: categorias,
+          datasets: [{
+            label: 'Ventas totales por categoría',
+            data: ventasTotales,
+            backgroundColor: 'rgba(0, 128, 0, 0.5)',
+            borderColor: 'rgba(0, 128, 0, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+      setVentasTotalescategoriaChart(ventasCategoria);
+    }
+  }, [ventasTotalescategoria]);
+
+
+  useEffect(() => {
+    fetch('http://localhost:5000/crudDb2/VentasTotalestrimestre')
+      .then((response) => response.json())
+      .then((data) => setVentasTotalestrimestre(data))
+      .catch((error) => console.error('Error al obtener las ventas totales por trimestre:', error));
+  }, []);
+  
+  useEffect(() => {
+    if (ventasTotalestrimestre.length > 0) {
+      const ctx = document.getElementById('ventasTotalestrimestreChart');
+  
+      if (ventasTotalestrimestreChart !== null) {
+        ventasTotalestrimestreChart.destroy();
+      }
+  
+      const trimestres = ventasTotalestrimestre.map((venta) => venta.trimestre);
+      const ventasTotales = ventasTotalestrimestre.map((venta) => venta.Ventas_totales);
+  
+      const ventasTrimestre = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: trimestres,
+          datasets: [{
+            label: 'Ventas totales por trimestre',
+            data: ventasTotales,
+            backgroundColor: 'rgba(0, 128, 0, 0.5)',
+            borderColor: 'rgba(0, 128, 0, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+      setVentasTotalestrimestreChart(ventasTrimestre);
+    }
+  }, [ventasTotalestrimestre]);
+
+
+  useEffect(() => {
+    fetch('http://localhost:5000/crudDb2/VentasTotalespromedioproducto')
+      .then((response) => response.json())
+      .then((data) => setVentasTotalespromedioproducto(data))
+      .catch((error) => console.error('Error al obtener las ventas totales promedio por producto:', error));
+  }, []);
+  
+  useEffect(() => {
+    if (ventasTotalespromedioproducto.length > 0) {
+      const ctx = document.getElementById('ventasTotalespromedioproductoChart');
+  
+      if (ventasTotalespromedioproductoChart !== null) {
+        ventasTotalespromedioproductoChart.destroy();
+      }
+  
+      const productos = ventasTotalespromedioproducto.map((venta) => venta.nombre_Producto);
+      const promediosVentas = ventasTotalespromedioproducto.map((venta) => venta.Promedio_Ventas);
+  
+      const ventasPromedioProducto = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: productos,
+          datasets: [{
+            label: 'Ventas totales promedio por producto',
+            data: promediosVentas,
+            backgroundColor: 'rgba(0, 128, 0, 0.5)',
+            borderColor: 'rgba(0, 128, 0, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+      setVentasTotalespromedioproductoChart(ventasPromedioProducto);
+    }
+  }, [ventasTotalespromedioproducto]);
+
+
+
+  useEffect(() => {
+    fetch('http://localhost:5000/crudDb2/VentasTotalesproductomes')
+      .then((response) => response.json())
+      .then((data) => setVentasTotalesproductomes(data))
+      .catch((error) => console.error('Error al obtener las ventas totales por producto y mes:', error));
+  }, []);
+  
+  useEffect(() => {
+    if (ventasTotalesproductomes.length > 0) {
+      const ctx = document.getElementById('ventasTotalesproductomesChart');
+  
+      if (ventasTotalesproductomesChart !== null) {
+        ventasTotalesproductomesChart.destroy();
+      }
+  
+      const productosMes = ventasTotalesproductomes.map((venta) => `${venta.nombre_Producto} - ${venta.mes}/${venta.anio}`);
+      const ventasTotales = ventasTotalesproductomes.map((venta) => venta.Ventas_Totales);
+  
+      const ventasProductoMes = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: productosMes,
+          datasets: [{
+            label: 'Ventas totales por producto y mes',
+            data: ventasTotales,
+            backgroundColor: 'rgba(0, 128, 0, 0.5)',
+            borderColor: 'rgba(0, 128, 0, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+      setVentasTotalesproductomesChart(ventasProductoMes);
+    }
+  }, [ventasTotalesproductomes]);
+
+
+
+  useEffect(() => {
+    fetch('http://localhost:5000/crudDb2/VentasTotalestop5producto')
+      .then((response) => response.json())
+      .then((data) => setVentasTotalestop5producto(data))
+      .catch((error) => console.error('Error al obtener las ventas totales de los 5 productos más vendidos:', error));
+  }, []);
+  
+  useEffect(() => {
+    if (ventasTotalestop5producto.length > 0) {
+      const ctx = document.getElementById('ventasTotalestop5productoChart');
+  
+      if (ventasTotalestop5productoChart !== null) {
+        ventasTotalestop5productoChart.destroy();
+      }
+  
+      const productosTop5 = ventasTotalestop5producto.map((venta) => venta.nombre_Producto);
+      const ventasTotalesTop5 = ventasTotalestop5producto.map((venta) => venta.Cantidad_Total_Vendida);
+  
+      const ventasTop5Productos = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: productosTop5,
+          datasets: [{
+            label: 'Ventas totales de los 5 productos más vendidos',
+            data: ventasTotalesTop5,
+            backgroundColor: 'rgba(0, 128, 0, 0.5)',
+            borderColor: 'rgba(0, 128, 0, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+      setVentasTotalestop5productoChart(ventasTop5Productos);
+    }
+  }, [ventasTotalestop5producto]);
+
+
+
   
   
   
 
 
   useEffect(() => {
-    fetch('http://localhost:5000/crud/readDetalleCompras')
+    fetch('http://localhost:5000/crud/readDetalleVentas')
       .then((response) => response.json())
       .then((data) => setCompras(data))
       .catch((error) => console.error('Error al obtener los detalles de compra:', error));
@@ -238,7 +513,7 @@ function Estadisticas({ rol }) {
       }
 
       const nombresProductos = compras.map((compra) => compra.nombre_Producto);
-      const cantidad = compras.map((compra) => compra.cantidad);
+      const cantidad = compras.map((compra) => compra.cantidad_Disponible);
 
       const almacen = new Chart(ctx, {
         type: 'bar',
@@ -274,7 +549,7 @@ function Estadisticas({ rol }) {
       }
 
       const nombresProductos = compras.map((compra) => compra.nombre_Producto);
-      const totalcompra = compras.map((compra) => compra.total_Compra);
+      const totalcompra = compras.map((compra) => compra.total_Venta);
 
       const almacen = new Chart(ctx, {
         type: 'bar',
@@ -313,10 +588,10 @@ function Estadisticas({ rol }) {
         const headers = ['Producto','Precio', 'Precio Compra', 'Stock', 'Cantidad Compra', 'Total Compra'];
         const data = detallesCompra.map((detalleCompra) => [
           detalleCompra.nombre_Producto,
-          `C$ ${formatearNumeroConComas(detalleCompra.precio)}`,
+          `C$ ${formatearNumeroConComas(detalleCompra.precio_Venta)}`,
           `C$ ${formatearNumeroConComas(detalleCompra.precio_Compra)}`,
-          detalleCompra.cantidad,
-          detalleCompra.cantidad_Compra,
+          detalleCompra.cantidad_Disponible,
+          detalleCompra.cantidad_Vendida,
           `C$ ${detalleCompra.total_Compra.toFixed(2)}`,
         ]);
   
@@ -537,6 +812,106 @@ function Estadisticas({ rol }) {
           </Card.Body>
         </Card>
   </Col>
+
+
+  <Col sm="6" md="6" lg="6">
+        <Card>
+          <Card.Body>
+            <Card.Title>Ventas totales por producto</Card.Title>
+            <canvas id="ventasTotalesproductoChart" height="120"></canvas>         
+          </Card.Body>
+
+          <Card.Body>
+            <Button onClick={generarReporteAlmacen}>
+              Generar PDF
+            </Button>
+          </Card.Body>
+        </Card>
+  </Col>
+
+
+  <Col sm="6" md="6" lg="6">
+        <Card>
+          <Card.Body>
+            <Card.Title>Ventas totales por Categoria</Card.Title>
+            <canvas id="ventasTotalescategoriaChart" height="120"></canvas>         
+          </Card.Body>
+
+          <Card.Body>
+            <Button onClick={generarReporteAlmacen}>
+              Generar PDF
+            </Button>
+          </Card.Body>
+        </Card>
+  </Col>
+
+  
+  <Col sm="6" md="6" lg="6">
+        <Card>
+          <Card.Body>
+            <Card.Title>Ventas totales por trimestre</Card.Title>
+            <canvas id="ventasTotalestrimestreChart" height="120"></canvas>         
+          </Card.Body>
+
+          <Card.Body>
+            <Button onClick={generarReporteAlmacen}>
+              Generar PDF
+            </Button>
+          </Card.Body>
+        </Card>
+  </Col>
+
+
+  <Col sm="6" md="6" lg="6">
+        <Card>
+          <Card.Body>
+            <Card.Title>Ventas totales promedio productos</Card.Title>
+            <canvas id="ventasTotalespromedioproductoChart" height="120"></canvas>         
+          </Card.Body>
+
+          <Card.Body>
+            <Button onClick={generarReporteAlmacen}>
+              Generar PDF
+            </Button>
+          </Card.Body>
+        </Card>
+  </Col>
+
+
+  
+  <Col sm="6" md="6" lg="6">
+        <Card>
+          <Card.Body>
+            <Card.Title>Ventas totales producto por mes</Card.Title>
+            <canvas id="ventasTotalesproductomesChart" height="120"></canvas>         
+          </Card.Body>
+
+          <Card.Body>
+            <Button onClick={generarReporteAlmacen}>
+              Generar PDF
+            </Button>
+          </Card.Body>
+        </Card>
+  </Col>
+
+
+
+  
+  <Col sm="6" md="6" lg="6">
+        <Card>
+          <Card.Body>
+            <Card.Title>Ventas totales top 5 productos</Card.Title>
+            <canvas id="ventasTotalestop5productoChart" height="120"></canvas>         
+          </Card.Body>
+
+          <Card.Body>
+            <Button onClick={generarReporteAlmacen}>
+              Generar PDF
+            </Button>
+          </Card.Body>
+        </Card>
+  </Col>
+      
       
       
 
