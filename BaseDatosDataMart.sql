@@ -19,13 +19,19 @@ trimestre INTEGER NOT NULL
 
 CREATE TABLE D_Productos(
 id_Producto INTEGER PRIMARY KEY,
-calificacion INTEGER,
 nombre_Producto VARCHAR (255) NOT NULL,
 nombre_Categoria VARCHAR (25) NOT NULL,
 nombre_Marca VARCHAR (25) NOT NULL,
 cantidad_Disponible INTEGER,
 precio_Venta DECIMAL (12,4) NOT NULL,
 precio_Compra DECIMAL (12,4) NOT NULL
+);
+
+CREATE TABLE D_Calificaciones (
+    id_Calificacion INTEGER PRIMARY KEY AUTO_INCREMENT,
+    id_Producto INTEGER,
+    calificacion INTEGER,
+    FOREIGN KEY (id_Producto) REFERENCES D_Productos (id_Producto)
 );
 
 CREATE TABLE H_Ventas(
