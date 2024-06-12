@@ -577,7 +577,7 @@ function Estadisticas({ rol }) {
   
 
   const generarReporteCompras = () => {
-    fetch('http://localhost:5000/crud/readDetalleCompras')
+    fetch('http://localhost:5000/crud/readDetalleVentas')
       .then((response) => response.json())
       .then((detallesCompra) => {
         console.log('Estado de las ventas:', detallesCompra);
@@ -585,14 +585,14 @@ function Estadisticas({ rol }) {
         const doc = new jsPDF();
         doc.text('Reporte de las ventas', 20, 10);
   
-        const headers = ['Producto','Precio', 'Precio Compra', 'Stock', 'Cantidad Compra', 'Total Compra'];
+        const headers = ['Producto','Precio Venta', 'Precio Compra', 'Stock', 'Cantidad Vendida', 'Total Venta'];
         const data = detallesCompra.map((detalleCompra) => [
           detalleCompra.nombre_Producto,
-          `C$ ${formatearNumeroConComas(detalleCompra.precio_Venta)}`,
-          `C$ ${formatearNumeroConComas(detalleCompra.precio_Compra)}`,
+          `C$ ${formatearNumeroConComas(detalleCompra.precio_Venta.toFixed(2))}`,
+          `C$ ${formatearNumeroConComas(detalleCompra.precio_Compra.toFixed(2))}`,
           detalleCompra.cantidad_Disponible,
-          detalleCompra.cantidad_Vendida,
-          `C$ ${detalleCompra.total_Compra.toFixed(2)}`,
+          detalleCompra.cantidad_Productos,
+          `C$ ${detalleCompra.total_Venta.toFixed(2)}`,
         ]);
   
         try {
@@ -614,7 +614,7 @@ function Estadisticas({ rol }) {
   };
 
   const generarReporteAlmacen = () => {
-    fetch('http://localhost:5000/crud/readDetalleCompras')
+    fetch('http://localhost:5000/crud/readDetalleVentas')
       .then((response) => response.json())
       .then((detallesCompra) => {
         console.log('Estado de almacen:', detallesCompra);
@@ -625,8 +625,8 @@ function Estadisticas({ rol }) {
         const headers = ['Producto', 'Precio', 'Stock'];
         const data = detallesCompra.map((detalleCompra) => [
           detalleCompra.nombre_Producto,
-          `C$ ${formatearNumeroConComas(detalleCompra.precio)}`,
-          detalleCompra.cantidad,
+          `C$ ${formatearNumeroConComas(detalleCompra.precio_Venta)}`,
+          detalleCompra.cantidad_Disponible,
         ]);
       
         try {
@@ -639,6 +639,40 @@ function Estadisticas({ rol }) {
           });
       
           doc.save('reporte_productos.pdf');
+          console.log('Documento PDF generado y descargado.');
+        } catch (error) {
+          console.error('Error al generar el PDF con autoTable:', error);
+        }
+      })
+      .catch((error) => console.error('Error al obtener el stock:', error));      
+  };
+
+
+  const generarReporteVentasAño = () => {
+    fetch('http://localhost:5000/crudDb2/VentasTotalesanio')
+      .then((response) => response.json())
+      .then((detallesCompra) => {
+        console.log('Ventas Totales Año:', detallesCompra);
+      
+        const doc = new jsPDF();
+        doc.text('Reporte Ventas Año', 20, 10);
+      
+        const headers = ['Total Compra', 'Año'];
+        const data = detallesCompra.map((detalleCompra) => [
+          `C$ ${formatearNumeroConComas(detalleCompra.Ventas_totales)}`,
+          (detalleCompra.anio)
+        ]);
+      
+        try {
+          doc.autoTable({
+            startY: 20,
+            head: [headers],
+            body: data,
+            theme: 'striped',
+            margin: { top: 15 },
+          });
+      
+          doc.save('reporte_VentaAño.pdf');
           console.log('Documento PDF generado y descargado.');
         } catch (error) {
           console.error('Error al generar el PDF con autoTable:', error);
@@ -774,7 +808,7 @@ function Estadisticas({ rol }) {
           </Card.Body>
 
           <Card.Body>
-            <Button onClick={generarReporteAlmacen}>
+            <Button onClick={generarReporteVentasAño}>
               Generar PDF
             </Button>
           </Card.Body>
