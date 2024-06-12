@@ -657,7 +657,7 @@ function Estadisticas({ rol }) {
         const doc = new jsPDF();
         doc.text('Reporte Ventas Año', 20, 10);
       
-        const headers = ['Total Compra', 'Año'];
+        const headers = ['Total Venta', 'Año'];
         const data = detallesCompra.map((detalleCompra) => [
           `C$ ${formatearNumeroConComas(detalleCompra.Ventas_totales)}`,
           (detalleCompra.anio)
@@ -680,6 +680,111 @@ function Estadisticas({ rol }) {
       })
       .catch((error) => console.error('Error al obtener el stock:', error));      
   };
+
+  const generarReporteVentasDia = () => {
+    fetch('http://localhost:5000/crudDb2/VentasTotalesmesanio')
+      .then((response) => response.json())
+      .then((detallesCompra) => {
+        console.log('Ventas Totales Año:', detallesCompra);
+      
+        const doc = new jsPDF();
+        doc.text('Reporte Ventas Dia', 20, 10);
+      
+        const headers = ['Total Venta', 'Dia'];
+        const data = detallesCompra.map((detalleCompra) => [
+          `C$ ${formatearNumeroConComas(detalleCompra.Ventas_totales)}`,
+          (detalleCompra.dia)
+        ]);
+      
+        try {
+          doc.autoTable({
+            startY: 20,
+            head: [headers],
+            body: data,
+            theme: 'striped',
+            margin: { top: 15 },
+          });
+      
+          doc.save('reporte_VentaDia.pdf');
+          console.log('Documento PDF generado y descargado.');
+        } catch (error) {
+          console.error('Error al generar el PDF con autoTable:', error);
+        }
+      })
+      .catch((error) => console.error('Error al obtener el stock:', error));      
+  };
+
+
+
+  const generarReporteCategoria = () => {
+    fetch('http://localhost:5000/crudDb2/VentasTotalescategoria')
+      .then((response) => response.json())
+      .then((detallesCompra) => {
+        console.log('Ventas Totales Por Categoria:', detallesCompra);
+      
+        const doc = new jsPDF();
+        doc.text('Reporte Ventas por Categoria', 20, 10);
+      
+        const headers = ['Categoria', 'Total Venta'];
+        const data = detallesCompra.map((detalleCompra) => [
+         (detalleCompra.nombre_Categoria),
+         `C$ ${formatearNumeroConComas(detalleCompra.Ventas_Totales)}`,
+        ]);
+      
+        try {
+          doc.autoTable({
+            startY: 20,
+            head: [headers],
+            body: data,
+            theme: 'striped',
+            margin: { top: 15 },
+          });
+      
+          doc.save('reporte_VentaCategoria.pdf');
+          console.log('Documento PDF generado y descargado.');
+        } catch (error) {
+          console.error('Error al generar el PDF con autoTable:', error);
+        }
+      })
+      .catch((error) => console.error('Error al obtener el stock:', error));      
+  };
+
+  const generarReporteVentasMesEspe = () => {
+    fetch('http://localhost:5000/crudDb2/VentasTotalesmesespecifico')
+      .then((response) => response.json())
+      .then((detallesCompra) => {
+        console.log('Ventas Totales Por Mes:', detallesCompra);
+      
+        const doc = new jsPDF();
+        doc.text('Reporte Ventas por Mes', 20, 10);
+      
+        const headers = ['Mes', 'Total Venta'];
+        const data = detallesCompra.map((detalleCompra) => [
+         (detalleCompra.mes),
+         `C$ ${formatearNumeroConComas(detalleCompra.Ventas_totales)}`
+        ]);
+      
+        try {
+          doc.autoTable({
+            startY: 20,
+            head: [headers],
+            body: data,
+            theme: 'striped',
+            margin: { top: 15 },
+          });
+      
+          doc.save('reporte_VentaPormes.pdf');
+          console.log('Documento PDF generado y descargado.');
+        } catch (error) {
+          console.error('Error al generar el PDF con autoTable:', error);
+        }
+      })
+      .catch((error) => console.error('Error al obtener el stock:', error));      
+  };
+
+
+
+
 
   const generarReporteComprasImg = async () => {
     try {
@@ -819,12 +924,12 @@ function Estadisticas({ rol }) {
   <Col sm="6" md="6" lg="6">
         <Card>
           <Card.Body>
-            <Card.Title>Ventas totales por mes</Card.Title>
+            <Card.Title>Ventas totales por Dias de un mes especifico</Card.Title>
             <canvas id="ventasTotalesmesanioChart" height="120"></canvas>         
           </Card.Body>
 
           <Card.Body>
-            <Button onClick={generarReporteAlmacen}>
+            <Button onClick={generarReporteVentasDia}>
               Generar PDF
             </Button>
           </Card.Body>
@@ -840,7 +945,7 @@ function Estadisticas({ rol }) {
           </Card.Body>
 
           <Card.Body>
-            <Button onClick={generarReporteAlmacen}>
+            <Button onClick={generarReporteVentasMesEspe}>
               Generar PDF
             </Button>
           </Card.Body>
@@ -872,7 +977,7 @@ function Estadisticas({ rol }) {
           </Card.Body>
 
           <Card.Body>
-            <Button onClick={generarReporteAlmacen}>
+            <Button onClick={generarReporteCategoria}>
               Generar PDF
             </Button>
           </Card.Body>

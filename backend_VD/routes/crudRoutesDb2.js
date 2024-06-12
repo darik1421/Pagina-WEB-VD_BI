@@ -57,14 +57,14 @@ GROUP BY
 
     router.get('/VentasTotalesmesespecifico', (req, res) => {
       const sql = `SELECT 
-      trimestre, 
+      mes, 
       SUM(total_Venta) AS Ventas_totales
   FROM 
       H_Ventas
   JOIN 
       D_Tiempos ON H_Ventas.id_Tiempo = D_Tiempos.id_Tiempo
   GROUP BY 
-      trimestre`;
+      mes`;
       db.query(sql, (err, result) => {
         if (err) {
           console.error('Error al obtener las categorías:', err);
