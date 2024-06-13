@@ -537,11 +537,14 @@ function Estadisticas({ rol }) {
 
  
   useEffect(() => {
-    fetch('http://localhost:5000/crud/readDetalleVentas')
+    fetch('http://localhost:5000/crud/readtop10ventas')
       .then((response) => response.json())
       .then((data) => setCompras(data))
       .catch((error) => console.error('Error al obtener los detalles de compra:', error));
   }, []);
+
+
+
   useEffect(() => {
     if (compras.length > 0) {
       const ctx = document.getElementById('myChart');
@@ -551,7 +554,7 @@ function Estadisticas({ rol }) {
       }
 
       const nombresProductos = compras.map((compra) => compra.nombre_Producto);
-      const totalcompra = compras.map((compra) => compra.total_Venta);
+      const totalcompra = compras.map((compra) => compra.total_Ventas);
 
       const almacen = new Chart(ctx, {
         type: 'bar',

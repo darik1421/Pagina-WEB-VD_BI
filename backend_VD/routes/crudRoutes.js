@@ -11,6 +11,8 @@ module.exports = (db) => {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+
+
 router.get('/stock/:idProducto', (req, res) => {
   const idProducto = req.params.idProducto;
 
@@ -32,9 +34,6 @@ router.get('/stock/:idProducto', (req, res) => {
     res.json({ stock });
   });
 });
-
-
-
 
 
 
@@ -168,8 +167,56 @@ router.get('/nombremarcas', (req, res) => {
         }
       });
     });
+
+    router.get('/readtop10ventas', (req, res) => {
+      const sql =`SELECT 
+      p.id_Producto,
+      p.nombre_Producto,
+      SUM(dv.total_Venta) AS total_Ventas
+  FROM 
+      Detalle_Venta dv
+  JOIN 
+      Productos p ON dv.id_Producto = p.id_Producto
+  GROUP BY 
+      p.id_Producto, p.nombre_Producto
+  ORDER BY 
+      total_Ventas DESC
+  LIMIT 10;`;
+      db.query(sql, (err, result) => {
+        if (err) {
+          console.error('Error al leer registros:', err);
+          res.status(500).json({ error: 'Error al leer registros' });
+        } else {
+          res.status(200).json(result);
+        }
+      });
+    });
     
+    router.get('/readStock', (req, res) => {
+      const sql = ` SELECT 
+      id_Producto,
+      nombre_Producto,
+      cantidad_Disponible
+  FROM 
+      Productos
+  ORDER BY 
+      cantidad_Disponible DESC
+  LIMIT 10;`;
     
+      db.query(sql, (err, result) => {
+        if (err) {
+          console.error('Error al leer registros:', err);
+          res.status(500).json({ error: 'Error al leer registros' });
+        } else {
+          res.status(200).json(result);
+        }
+      });
+    });
+
+
+
+
+
   //Ruta para consultar marcas
 
   router.get('/readmarcas', (req, res) => {
