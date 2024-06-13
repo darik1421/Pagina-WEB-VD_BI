@@ -60,7 +60,7 @@ GROUP BY
 
     router.get('/VentasTotalesmesespecifico', (req, res) => {
       const sql = `SELECT 
-      trimestre, 
+      mes, 
       SUM(total_Venta) AS Ventas_totales
   FROM 
       H_Ventas

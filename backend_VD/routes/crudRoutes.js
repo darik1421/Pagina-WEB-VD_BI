@@ -35,6 +35,9 @@ router.get('/stock/:idProducto', (req, res) => {
 
 
 
+
+
+
 // Ruta para validar usuarios
 
   // Ruta para verificar las credenciales y obtener el rol del usuario
