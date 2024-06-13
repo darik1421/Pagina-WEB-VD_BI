@@ -647,8 +647,44 @@ function Estadisticas({ rol }) {
       .catch((error) => console.error('Error al obtener el stock:', error));      
   };
 
+  
 
-  const generarReporteVentasAño = () => {
+  const generarReporteProductosPorCategoria = () => {
+    fetch('http://localhost:5000/crud/productosPorCategoria')
+      .then((response) => response.json())
+      .then((detallesCompra) => {
+        console.log('Ventas por categoria:', detallesCompra);
+      
+        const doc = new jsPDF();
+        doc.text('Reporte cantidad producto por categoria', 20, 10);
+      
+        const headers = ['Categoria', 'Cantidad disponible'];
+        const data = detallesCompra.map((detalleCompra) => [
+         detalleCompra.nombre_Categoria,
+          detalleCompra.cantidad_Disponible
+        ]);
+      
+        try {
+          doc.autoTable({
+            startY: 20,
+            head: [headers],
+            body: data,
+            theme: 'striped',
+            margin: { top: 15 },
+          });
+      
+          doc.save('reporte_VentaCategoria.pdf');
+          console.log('Documento PDF generado y descargado.');
+        } catch (error) {
+          console.error('Error al generar el PDF con autoTable:', error);
+        }
+      })
+      .catch((error) => console.error('Error al obtener el stock:', error));      
+  };
+
+  
+
+   const generarReporteVentasAño = () => {
     fetch('http://localhost:5000/crudDb2/VentasTotalesanio')
       .then((response) => response.json())
       .then((detallesCompra) => {
@@ -673,6 +709,177 @@ function Estadisticas({ rol }) {
           });
       
           doc.save('reporte_VentaAño.pdf');
+          console.log('Documento PDF generado y descargado.');
+        } catch (error) {
+          console.error('Error al generar el PDF con autoTable:', error);
+        }
+      })
+      .catch((error) => console.error('Error al obtener el stock:', error));      
+  };
+
+  const generarReporteVentasTotalesPorProducto = () => {
+    fetch('http://localhost:5000/crudDb2/VentasTotalesproducto')
+      .then((response) => response.json())
+      .then((detallesCompra) => {
+        console.log('Ventas Totales Por Productos:', detallesCompra);
+      
+        const doc = new jsPDF();
+        doc.text('Reporte Ventas Por productos', 20, 10);
+      
+        const headers = ['Producto', 'Total Venta'];
+        const data = detallesCompra.map((detalleCompra) => [
+          (detalleCompra.nombre_Producto),
+          `C$ ${formatearNumeroConComas(detalleCompra.Ventas_totales)}`
+         
+        ]);
+      
+        try {
+          doc.autoTable({
+            startY: 20,
+            head: [headers],
+            body: data,
+            theme: 'striped',
+            margin: { top: 15 },
+          });
+      
+          doc.save('reporte_VentaProducto.pdf');
+          console.log('Documento PDF generado y descargado.');
+        } catch (error) {
+          console.error('Error al generar el PDF con autoTable:', error);
+        }
+      })
+      .catch((error) => console.error('Error al obtener el stock:', error));      
+  };
+
+  const generarReporteVentasTotalesTrismestre = () => {
+    fetch('http://localhost:5000/crudDb2/VentasTotalestrimestre')
+      .then((response) => response.json())
+      .then((detallesCompra) => {
+        console.log('Ventas Totales Año:', detallesCompra);
+      
+        const doc = new jsPDF();
+        doc.text('Reporte Ventas Trimestre', 20, 10);
+      
+        const headers = ['Trimestre', 'Total Venta'];
+        const data = detallesCompra.map((detalleCompra) => [
+          (detalleCompra.trimestre),
+          `C$ ${formatearNumeroConComas(detalleCompra.Ventas_totales)}`
+         
+        ]);
+      
+        try {
+          doc.autoTable({
+            startY: 20,
+            head: [headers],
+            body: data,
+            theme: 'striped',
+            margin: { top: 15 },
+          });
+      
+          doc.save('reporte_VentaTrimestre.pdf');
+          console.log('Documento PDF generado y descargado.');
+        } catch (error) {
+          console.error('Error al generar el PDF con autoTable:', error);
+        }
+      })
+      .catch((error) => console.error('Error al obtener el stock:', error));      
+  };
+
+  const generarReportePromedioVentasTotalesProducto = () => {
+    fetch('http://localhost:5000/crudDb2/VentasTotalespromedioproducto')
+      .then((response) => response.json())
+      .then((detallesCompra) => {
+        console.log('Promedio Ventas Totales Por Producto:', detallesCompra);
+      
+        const doc = new jsPDF();
+        doc.text('Reporte Promedio de ventas totales por producto ', 20, 10);
+      
+        const headers = ['Producto', 'Promedio'];
+        const data = detallesCompra.map((detalleCompra) => [
+          (detalleCompra.nombre_Producto),
+          `% ${formatearNumeroConComas(detalleCompra.Promedio_Ventas)}`
+         
+        ]);
+      
+        try {
+          doc.autoTable({
+            startY: 20,
+            head: [headers],
+            body: data,
+            theme: 'striped',
+            margin: { top: 15 },
+          });
+      
+          doc.save('reporte_PromedioVentas.pdf');
+          console.log('Documento PDF generado y descargado.');
+        } catch (error) {
+          console.error('Error al generar el PDF con autoTable:', error);
+        }
+      })
+      .catch((error) => console.error('Error al obtener el stock:', error));      
+  };
+
+  const generarReporteVentasTotalesProductosPorMes = () => {
+    fetch('http://localhost:5000/crudDb2/VentasTotalesproductomes')
+      .then((response) => response.json())
+      .then((detallesCompra) => {
+        console.log('Ventas Totales de Productos por Mes:', detallesCompra);
+      
+        const doc = new jsPDF();
+        doc.text('Reporte de Ventas Totales de Productos por Mes ', 20, 10);
+      
+        const headers = ['Producto', 'Mes', 'Ventas'];
+        const data = detallesCompra.map((detalleCompra) => [
+          (detalleCompra.nombre_Producto),
+          (detalleCompra.mes),
+          `C$ ${formatearNumeroConComas(detalleCompra.Ventas_Totales)}`
+         
+        ]);
+      
+        try {
+          doc.autoTable({
+            startY: 20,
+            head: [headers],
+            body: data,
+            theme: 'striped',
+            margin: { top: 15 },
+          });
+      
+          doc.save('reporte_VentasTotalesDeProductosPorMes.pdf');
+          console.log('Documento PDF generado y descargado.');
+        } catch (error) {
+          console.error('Error al generar el PDF con autoTable:', error);
+        }
+      })
+      .catch((error) => console.error('Error al obtener el stock:', error));      
+  };
+ 
+  const generarReporteVentasTotalesTop5Productos = () => {
+    fetch('http://localhost:5000/crudDb2/VentasTotalestop5producto')
+      .then((response) => response.json())
+      .then((detallesCompra) => {
+        console.log('Ventas Totales Top 5 Productos:', detallesCompra);
+      
+        const doc = new jsPDF();
+        doc.text('Reporte Ventas Totales de Top 5 productos ', 20, 10);
+      
+        const headers = ['Producto', 'Cantidad Vendida'];
+        const data = detallesCompra.map((detalleCompra) => [
+          (detalleCompra.nombre_Producto),
+          (detalleCompra.Cantidad_Total_Vendida),
+         
+        ]);
+      
+        try {
+          doc.autoTable({
+            startY: 20,
+            head: [headers],
+            body: data,
+            theme: 'striped',
+            margin: { top: 15 },
+          });
+      
+          doc.save('reporte_VentasTotalesTop5Productos.pdf');
           console.log('Documento PDF generado y descargado.');
         } catch (error) {
           console.error('Error al generar el PDF con autoTable:', error);
@@ -792,7 +999,7 @@ function Estadisticas({ rol }) {
           </Card.Body>
 
           <Card.Body>
-            <Button onClick={generarReporteAlmacen}>
+            <Button onClick={generarReporteProductosPorCategoria}>
               Generar PDF
             </Button>
           </Card.Body>
@@ -856,7 +1063,7 @@ function Estadisticas({ rol }) {
           </Card.Body>
 
           <Card.Body>
-            <Button onClick={generarReporteAlmacen}>
+            <Button onClick={generarReporteVentasTotalesPorProducto}>
               Generar PDF
             </Button>
           </Card.Body>
@@ -888,7 +1095,7 @@ function Estadisticas({ rol }) {
           </Card.Body>
 
           <Card.Body>
-            <Button onClick={generarReporteAlmacen}>
+            <Button onClick={generarReporteVentasTotalesTrismestre}>
               Generar PDF
             </Button>
           </Card.Body>
@@ -904,7 +1111,7 @@ function Estadisticas({ rol }) {
           </Card.Body>
 
           <Card.Body>
-            <Button onClick={generarReporteAlmacen}>
+            <Button onClick={generarReportePromedioVentasTotalesProducto}>
               Generar PDF
             </Button>
           </Card.Body>
@@ -921,7 +1128,7 @@ function Estadisticas({ rol }) {
           </Card.Body>
 
           <Card.Body>
-            <Button onClick={generarReporteAlmacen}>
+            <Button onClick={generarReporteVentasTotalesProductosPorMes}>
               Generar PDF
             </Button>
           </Card.Body>
@@ -939,7 +1146,7 @@ function Estadisticas({ rol }) {
           </Card.Body>
 
           <Card.Body>
-            <Button onClick={generarReporteAlmacen}>
+            <Button onClick={generarReporteVentasTotalesTop5Productos}>
               Generar PDF
             </Button>
           </Card.Body>

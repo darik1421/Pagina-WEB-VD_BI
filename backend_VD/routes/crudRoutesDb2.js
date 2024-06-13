@@ -9,6 +9,9 @@ module.exports = (db) => {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 // Ruta para obtener los nombres de las categorías
 router.get('/VentasTotalesanio', (req, res) => {
   const sql = `SELECT 
@@ -64,7 +67,7 @@ GROUP BY
   JOIN 
       D_Tiempos ON H_Ventas.id_Tiempo = D_Tiempos.id_Tiempo
   GROUP BY 
-      trimestre`;
+      mes`;
       db.query(sql, (err, result) => {
         if (err) {
           console.error('Error al obtener las categorías:', err);
