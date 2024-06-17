@@ -113,6 +113,10 @@ function Header({ rol }) {
                       <Link to="/Estadistica" className="link-unstyled">Estadisticas</Link>
                     </NavDropdown.Item>
 
+                    <NavDropdown.Item>
+                      <Link to="/BI" className="link-unstyled">Estadisticas BI</Link>
+                    </NavDropdown.Item>
+
                   </NavDropdown>
 
 
