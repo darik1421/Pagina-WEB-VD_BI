@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import Chart from 'chart.js/auto';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import html2canvas from 'html2canvas';
+import emailjs from 'emailjs-com';
 
 
 function Estadisticas({ rol }) {
@@ -35,7 +36,37 @@ function Estadisticas({ rol }) {
   function formatearNumeroConComas(numero) {
     const numeroFormateado = Number(numero).toFixed(2);
     return numeroFormateado.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }  
+  }
+
+  const formatearVentas= (detallesCompra) => {
+    return detallesCompra.map(detalleCompra => {
+      return `Nombre: ${detalleCompra.nombre_Producto} \nPromedio Calificación: ${detalleCompra.precio_Venta}`;
+    }).join('\n\n');
+  };  
+
+  const enviarCorreo = () => {
+    // Formateo de datos
+    const ventasformateadas = formatearVentas(compras);
+
+    // Datos de ejemplo (reemplaza con tus datos reales)
+    const data = {
+      to_name: 'Cristhian',
+      user_email: 'cristhiancesarvargas12@gmail.com',
+      message: ventasformateadas,
+    };
+
+    // Envía el correo utilizando EmailJS
+    emailjs.send('service_o0q441p', 'template_3dp5oap', data, 'khm0dhZwFelFqMnIv')
+      .then((response) => {
+        alert('Correo enviado.');
+        console.log('Correo enviado.', response);
+      })
+      .catch((error) => {
+        alert('Error al enviar el correo.');
+        console.error('Error al enviar el correo:', error);
+      });
+  };
+
 
 
   
@@ -192,44 +223,63 @@ function Estadisticas({ rol }) {
     fetch('http://localhost:5000/crudDb2/VentasTotalesmesespecifico')
       .then((response) => response.json())
       .then((data) => setVentasTotalesmesespecifico(data))
-      .catch((error) => console.error('Error al obtener las ventas totales por trimestre:', error));
+      .catch((error) => console.error('Error al obtener las ventas totales por mes:', error));
   }, []);
   
   useEffect(() => {
     if (ventasTotalesmesespecifico.length > 0) {
       const ctx = document.getElementById('ventasTotalesmesespecificoChart');
-  
+      
       if (ventasTotalesmesespecificoChart !== null) {
         ventasTotalesmesespecificoChart.destroy();
       }
   
-      const trimestres = ventasTotalesmesespecifico.map((venta) => venta.trimestre);
-      const ventasTotales = ventasTotalesmesespecifico.map((venta) => venta.Ventas_totales);
+      const labels = ventasTotalesmesespecifico.map((venta) => venta.mes);
+      const data = ventasTotalesmesespecifico.map((venta) => venta.Ventas_totales);
   
-      const ventasTrimestre = new Chart(ctx, {
-        type: 'bar',
+      const ventasMes = new Chart(ctx, {
+        type:'pie',
         data: {
-          labels: trimestres,
+          labels:labels,
           datasets: [{
-            label: 'Ventas totales por trimestre',
-            data: ventasTotales,
-            backgroundColor: 'rgba(0, 128, 0, 0.5)',
-            borderColor: 'rgba(0, 128, 0, 1)',
+            label:'Ventas totales por mes',
+            data: data,
+            backgroundColor: [
+              'rgba(255,99,132,0.5)',
+              'rgba(54,162,235,0.5)',
+              'rgba(255,206,86,0.5)',
+              'rgba(75,192,192,0.5)',
+              'rgba(153,102,255,0.5)',
+              'rgba(255,159,64,0.5)'
+            ],
+            borderColor: [
+              'rgba(255,99,132,1)',
+              'rgba(54,162,235,1)',
+              'rgba(255,206,86,1)',
+              'rgba(75,192,192,1)',
+              'rgba(153,102,255,1)',
+              'rgba(255,159,64,1)'
+            ],
             borderWidth: 1
           }]
         },
         options: {
-          scales: {
-            y: {
-              beginAtZero: true
+          responsive:true,
+          plugins:{
+            legend:{
+              position:'top',
+            },
+            title: {
+              display:true,
+              text:'Ventas  totales por un mes'
             }
           }
         }
       });
-      setVentasTotalesmesespecificoChart(ventasTrimestre);
+      setVentasTotalesmesespecificoChart(ventasMes);
     }
   }, [ventasTotalesmesespecifico]);
-
+  
 
   useEffect(() => {
     fetch('http://localhost:5000/crudDb2/VentasTotalesproducto')
@@ -991,6 +1041,47 @@ function Estadisticas({ rol }) {
       .catch((error) => console.error('Error al obtener el stock:', error));      
   };
 
+  const generarReporteVentadiaImg = async () => {
+    try {
+      const canvas = await html2canvas(document.getElementById('ventasTotalesmesanioChart'));
+      const pdf = new jsPDF();
+      const imgData = canvas.toDataURL('image/png');
+      pdf.text("Reporte de productos por categoria", 20, 10);
+      pdf.addImage(imgData, 'PNG', 10, 20, 100, 100);
+      pdf.save("reporte_ProductoCate.pdf");
+    } catch (error) {
+      console.error('Error al generar el reporte con imagen:', error);
+    }
+  };
+
+  const generarReporteProductoCateImg = async () => {
+    try {
+      const canvas = await html2canvas(document.getElementById('myCategories'));
+      const pdf = new jsPDF();
+      const imgData = canvas.toDataURL('image/png');
+      pdf.text("Reporte de productos por categoria", 20, 10);
+      pdf.addImage(imgData, 'PNG', 10, 20, 100, 100);
+      pdf.save("reporte_ProductoCate.pdf");
+    } catch (error) {
+      console.error('Error al generar el reporte con imagen:', error);
+    }
+  };
+
+  
+  const generarReportePormesEspeImg = async () => {
+    try {
+      const canvas = await html2canvas(document.getElementById('ventasTotalesmesespecificoChart'));
+      const pdf = new jsPDF();
+      const imgData = canvas.toDataURL('image/png');
+      pdf.text("Reporte de productos por categoria", 20, 10);
+      pdf.addImage(imgData, 'PNG', 10, 20, 100, 100);
+      pdf.save("reporte_ProductoCate.pdf");
+    } catch (error) {
+      console.error('Error al generar el reporte con imagen:', error);
+    }
+  };
+
+
 
   const generarReporteComprasImg = async () => {
     try {
@@ -1017,6 +1108,105 @@ function Estadisticas({ rol }) {
       console.error('Error al generar el reporte con imagen:', error);
     }
   };
+
+  const generarReporteVentaAnioImg = async () => {
+    try {
+      const canvas = await html2canvas(document.getElementById('ventasTotalesmesanioChart'));
+      const pdf = new jsPDF();
+      const imgData = canvas.toDataURL('image/png');
+      pdf.text("Reporte del almacen", 20, 10);
+      pdf.addImage(imgData, 'PNG', 10, 20, 100, 100);
+      pdf.save("reporte_Almacen_Imagen.pdf");
+    } catch (error) {
+      console.error('Error al generar el reporte con imagen:', error);
+    }
+  };
+
+  const generarReporteVentaProductoImg = async () => {
+    try {
+      const canvas = await html2canvas(document.getElementById('ventasTotalesproductoChart'));
+      const pdf = new jsPDF();
+      const imgData = canvas.toDataURL('image/png');
+      pdf.text("Reporte del almacen", 20, 10);
+      pdf.addImage(imgData, 'PNG', 10, 20, 100, 100);
+      pdf.save("reporte_Almacen_Imagen.pdf");
+    } catch (error) {
+      console.error('Error al generar el reporte con imagen:', error);
+    }
+  };
+
+  const generarReporteVentaCateImg = async () => {
+    try {
+      const canvas = await html2canvas(document.getElementById('ventasTotalescategoriaChart'));
+      const pdf = new jsPDF();
+      const imgData = canvas.toDataURL('image/png');
+      pdf.text("Reporte del almacen", 20, 10);
+      pdf.addImage(imgData, 'PNG', 10, 20, 100, 100);
+      pdf.save("reporte_Almacen_Imagen.pdf");
+    } catch (error) {
+      console.error('Error al generar el reporte con imagen:', error);
+    }
+  };
+
+  const generarReporteVentaTrimestreImg = async () => {
+    try {
+      const canvas = await html2canvas(document.getElementById('ventasTotalestrimestreChart'));
+      const pdf = new jsPDF();
+      const imgData = canvas.toDataURL('image/png');
+      pdf.text("Reporte del almacen", 20, 10);
+      pdf.addImage(imgData, 'PNG', 10, 20, 100, 100);
+      pdf.save("reporte_Almacen_Imagen.pdf");
+    } catch (error) {
+      console.error('Error al generar el reporte con imagen:', error);
+    }
+  };
+
+  const generarReporteVentaPromedioImg = async () => {
+    try {
+      const canvas = await html2canvas(document.getElementById('ventasTotalespromedioproductoChart'));
+      const pdf = new jsPDF();
+      const imgData = canvas.toDataURL('image/png');
+      pdf.text("Reporte del almacen", 20, 10);
+      pdf.addImage(imgData, 'PNG', 10, 20, 100, 100);
+      pdf.save("reporte_Almacen_Imagen.pdf");
+    } catch (error) {
+      console.error('Error al generar el reporte con imagen:', error);
+    }
+  };
+
+
+  
+  const generarReporteVentaProductomesImg = async () => {
+    try {
+      const canvas = await html2canvas(document.getElementById('ventasTotalesproductomesChart'));
+      const pdf = new jsPDF();
+      const imgData = canvas.toDataURL('image/png');
+      pdf.text("Reporte del almacen", 20, 10);
+      pdf.addImage(imgData, 'PNG', 10, 20, 100, 100);
+      pdf.save("reporte_Almacen_Imagen.pdf");
+    } catch (error) {
+      console.error('Error al generar el reporte con imagen:', error);
+    }
+  };
+
+  const generarReporteVentatopProductosImg = async () => {
+    try {
+      const canvas = await html2canvas(document.getElementById('ventasTotalestop5productoChart'));
+      const pdf = new jsPDF();
+      const imgData = canvas.toDataURL('image/png');
+      pdf.text("Reporte del almacen", 20, 10);
+      pdf.addImage(imgData, 'PNG', 10, 20, 100, 100);
+      pdf.save("reporte_Almacen_Imagen.pdf");
+    } catch (error) {
+      console.error('Error al generar el reporte con imagen:', error);
+    }
+  };
+
+
+
+  
+  
+  
   
   return (
     <div>
@@ -1027,219 +1217,255 @@ function Estadisticas({ rol }) {
 
 
       <Container className="mt-8">
-        <Row className="global-margin-top-history">
-          <Col md={6}>
-            <Card>
-              <Card.Body>
-                <Card.Title className="text-center">Estados de las compras</Card.Title>
-                <div style={{ margin: '20px 0' }}>
-                  <canvas id="myChart" height="200"></canvas>
-                </div>
-              </Card.Body>
+  <Row className="global-margin-top-history">
+    <Col sm={12} md={6} lg={6} className="mb-4">
+      <Card>
+        <Card.Body>
+          <Card.Title className="text-center">Estados de las compras</Card.Title>
+          <div className="my-4">
+            <canvas id="myChart" height="200"></canvas>
+          </div>
+        </Card.Body>
+        <Card.Footer className="text-center">
+          <Button variant="primary" className='mr-2' onClick={generarReporteCompras}>
+            Generar Reporte
+          </Button>
+          <Button onClick={generarReporteComprasImg}>
+          Generar imagen
+          </Button>
+          <Button variant="secondary" onClick={enviarCorreo} className="mt-2">
+    Enviar por Correo
+  </Button>
+        </Card.Footer>
+      </Card>
+    </Col>
 
-              <Card.Footer className="text-center">
-                <Button variant="primary" className='buttom-right button-color' onClick={generarReporteCompras}>
-                  Generar Reporte
-                </Button>
-                <Button className='buttom-left button-color' onClick={generarReporteComprasImg}>
-                  Generar reporte con imagen
-                </Button>
-              </Card.Footer>
-            </Card>
-          </Col>
+    <Col sm={12} md={6} lg={6} className="mb-4">
+      <Card>
+        <Card.Body>
+          <Card.Title className="text-center">Estados de Almacen</Card.Title>
+          <div className="my-4">
+            <canvas id="myChart2" height="200"></canvas>
+          </div>
+        </Card.Body>
+        <Card.Footer className="text-center">
+          <Button variant="primary" className='mr-2' onClick={generarReporteAlmacen}>
+            Generar Reporte
+          </Button>
+          <Button onClick={generarReporteAlmacenImg}>
+          Generar imagen
+          </Button>
+          <Button onClick={generarReporteComprasImg}>
+          Correo
+          </Button>
+        </Card.Footer>
+      </Card>
+    </Col>
 
+    <Col sm={12} md={6} lg={6} className="mb-4">
+      <Card>
+        <Card.Body>
+          <Card.Title>Productos por Categorìa</Card.Title>
+          <canvas id="myCategories" height="120"></canvas>         
+        </Card.Body>
+        <Card.Footer className="text-center">
+          <Button onClick={generarReporteProductosPorCategoria}>
+            Generar PDF
+          </Button>
+          <Button onClick={generarReporteProductoCateImg}>
+          Generar imagen
+          </Button>
+          <Button onClick={generarReporteComprasImg}>
+          Correo
+          </Button>
+        </Card.Footer>
+      </Card>
+    </Col>
 
-        
-
-    
-          <Col md={6}>
-            <Card>
-              <Card.Body>
-                <Card.Title className="text-center">Estados de Almacen</Card.Title>
-                <div style={{ margin: '20px 0' }}>
-                  <canvas id="myChart2" height="200"></canvas>
-                </div>
-              </Card.Body>
-
-              <Card.Footer className="text-center">
-                <Button variant="primary" className='buttom-right button-color' onClick={generarReporteAlmacen}>
-                  Generar Reporte
-                </Button>
-                <Button className='buttom-left button-color' onClick={generarReporteAlmacenImg}>
-                  Generar reporte con imagen
-                </Button>
-              </Card.Footer>
-            </Card>
-          </Col>
-
-
-           <Col sm="6" md="6" lg="6">
-        <Card>
-          <Card.Body>
-            <Card.Title>Productos por Categorìa</Card.Title>
-            <canvas id="myCategories" height="120"></canvas>         
-          </Card.Body>
-
-          <Card.Body>
-            <Button onClick={generarReporteProductosPorCategoria}>
-              Generar PDF
-            </Button>
-          </Card.Body>
-        </Card>
-  </Col>
-
-
-  <Col sm="6" md="6" lg="6">
-        <Card>
-          <Card.Body>
-            <Card.Title>Ventas totales por año</Card.Title>
-            <canvas id="ventasPorAnioChart" height="120"></canvas>         
-          </Card.Body>
-
-          <Card.Body>
-            <Button onClick={generarReporteVentasAño}>
-              Generar PDF
-            </Button>
-          </Card.Body>
-        </Card>
-  </Col>
-
-
-  <Col sm="6" md="6" lg="6">
-        <Card>
-          <Card.Body>
-            <Card.Title>Ventas totales por Dias de un mes especifico</Card.Title>
-            <canvas id="ventasTotalesmesanioChart" height="120"></canvas>         
-          </Card.Body>
-
-          <Card.Body>
-            <Button onClick={generarReporteVentasDia}>
-              Generar PDF
-            </Button>
-          </Card.Body>
-        </Card>
-  </Col>
+    <Col sm={12} md={6} lg={6} className="mb-4">
+      <Card>
+        <Card.Body>
+          <Card.Title>Ventas totales por mes especifico</Card.Title>
+          <canvas id="ventasTotalesmesespecificoChart" height="120"></canvas>         
+        </Card.Body>
+        <Card.Footer className="text-center">
+          <Button onClick={generarReporteVentasMesEspe}>
+            Generar PDF
+          </Button>
+          <Button onClick={generarReportePormesEspeImg}>
+          Generar imagen
+          </Button>
+          <Button onClick={generarReporteComprasImg}>
+          Correo
+          </Button>
+        </Card.Footer>
+      </Card>
+    </Col>
 
 
-  <Col sm="6" md="6" lg="6">
-        <Card>
-          <Card.Body>
-            <Card.Title>Ventas totales por mes especifico</Card.Title>
-            <canvas id="ventasTotalesmesespecificoChart" height="120"></canvas>         
-          </Card.Body>
-
-          <Card.Body>
-            <Button onClick={generarReporteVentasMesEspe}>
-              Generar PDF
-            </Button>
-          </Card.Body>
-        </Card>
-  </Col>
-
-
-  <Col sm="6" md="6" lg="6">
-        <Card>
-          <Card.Body>
-            <Card.Title>Ventas totales por producto</Card.Title>
-            <canvas id="ventasTotalesproductoChart" height="120"></canvas>         
-          </Card.Body>
-
-          <Card.Body>
-            <Button onClick={generarReporteVentasTotalesPorProducto}>
-              Generar PDF
-            </Button>
-          </Card.Body>
-        </Card>
-  </Col>
-
-
-  <Col sm="6" md="6" lg="6">
-        <Card>
-          <Card.Body>
-            <Card.Title>Ventas totales por Categoria</Card.Title>
-            <canvas id="ventasTotalescategoriaChart" height="120"></canvas>         
-          </Card.Body>
-
-          <Card.Body>
-            <Button onClick={generarReporteCategoria}>
-              Generar PDF
-            </Button>
-          </Card.Body>
-        </Card>
-  </Col>
+    <Col sm={12} md={6} lg={6} className="mb-4">
+      <Card>
+        <Card.Body>
+          <Card.Title>Ventas totales por Dias de un mes especifico</Card.Title>
+          <canvas id="ventasTotalesmesanioChart" height="120"></canvas>         
+        </Card.Body>
+        <Card.Footer className="text-center">
+          <Button onClick={generarReporteVentasDia}>
+            Generar PDF
+          </Button>
+          <Button onClick={generarReporteVentadiaImg}>
+          Generar imagen
+          </Button>
+          <Button onClick={generarReporteComprasImg}>
+          Correo
+          </Button>
+        </Card.Footer>
+      </Card>
+    </Col>
 
   
-  <Col sm="6" md="6" lg="6">
-        <Card>
-          <Card.Body>
-            <Card.Title>Ventas totales por trimestre</Card.Title>
-            <canvas id="ventasTotalestrimestreChart" height="120"></canvas>         
-          </Card.Body>
+    <Col sm={12} md={6} lg={6} className="mb-4">
+      <Card>
+        <Card.Body>
+          <Card.Title>Ventas totales por año</Card.Title>
+          <canvas id="ventasPorAnioChart" height="120"></canvas>         
+        </Card.Body>
+        <Card.Footer className="text-center">
+          <Button onClick={generarReporteVentasAño}>
+            Generar PDF
+          </Button>
+          <Button onClick={generarReporteVentaAnioImg}>
+          Generar imagen
+          </Button>
+          <Button onClick={generarReporteComprasImg}>
+          Correo
+          </Button>
+        </Card.Footer>
+      </Card>
+    </Col>
 
-          <Card.Body>
-            <Button onClick={generarReporteVentasTotalesTrismestre}>
-              Generar PDF
-            </Button>
-          </Card.Body>
-        </Card>
-  </Col>
+    <Col sm={12} md={6} lg={6} className="mb-4">
+      <Card>
+        <Card.Body>
+          <Card.Title>Ventas totales por producto</Card.Title>
+          <canvas id="ventasTotalesproductoChart" height="120"></canvas>         
+        </Card.Body>
+        <Card.Footer className="text-center">
+          <Button onClick={generarReporteVentasTotalesPorProducto}>
+            Generar PDF
+          </Button>
+          <Button onClick={generarReporteVentaProductoImg}>
+          Generar imagen
+          </Button>
+          <Button onClick={generarReporteComprasImg}>
+          Correo
+          </Button>
+        </Card.Footer>
+      </Card>
+    </Col>
 
+    <Col sm={12} md={6} lg={6} className="mb-4">
+      <Card>
+        <Card.Body>
+          <Card.Title>Ventas totales por Categoria</Card.Title>
+          <canvas id="ventasTotalescategoriaChart" height="120"></canvas>         
+        </Card.Body>
+        <Card.Footer className="text-center">
+          <Button onClick={generarReporteCategoria}>
+            Generar PDF
+          </Button>
+          <Button onClick={generarReporteVentaCateImg}>
+          Generar imagen
+          </Button>
+          <Button onClick={generarReporteComprasImg}>
+          Correo
+          </Button>
+        </Card.Footer>
+      </Card>
+    </Col>
 
-  <Col sm="6" md="6" lg="6">
-        <Card>
-          <Card.Body>
-            <Card.Title>Ventas totales promedio productos</Card.Title>
-            <canvas id="ventasTotalespromedioproductoChart" height="120"></canvas>         
-          </Card.Body>
+    <Col sm={12} md={6} lg={6} className="mb-4">
+      <Card>
+        <Card.Body>
+          <Card.Title>Ventas totales por trimestre</Card.Title>
+          <canvas id="ventasTotalestrimestreChart" height="120"></canvas>         
+        </Card.Body>
+        <Card.Footer className="text-center">
+          <Button onClick={generarReporteVentasTotalesTrismestre}>
+            Generar PDF
+          </Button>
+          <Button onClick={generarReporteVentaTrimestreImg}>
+          Generar imagen
+          </Button>
+          <Button onClick={generarReporteComprasImg}>
+          Correo
+          </Button>
+        </Card.Footer>
+      </Card>
+    </Col>
 
-          <Card.Body>
-            <Button onClick={generarReportePromedioVentasTotalesProducto}>
-              Generar PDF
-            </Button>
-          </Card.Body>
-        </Card>
-  </Col>
+    <Col sm={12} md={6} lg={6} className="mb-4">
+      <Card>
+        <Card.Body>
+          <Card.Title>Ventas totales promedio productos</Card.Title>
+          <canvas id="ventasTotalespromedioproductoChart" height="120"></canvas>         
+        </Card.Body>
+        <Card.Footer className="text-center">
+          <Button onClick={generarReportePromedioVentasTotalesProducto}>
+            Generar PDF
+          </Button>
+          <Button onClick={generarReporteVentaPromedioImg}>
+          Generar imagen
+          </Button>
+          <Button onClick={generarReporteComprasImg}>
+          Correo
+          </Button>
+        </Card.Footer>
+      </Card>
+    </Col>
 
+    <Col sm={12} md={6} lg={6} className="mb-4">
+      <Card>
+        <Card.Body>
+          <Card.Title>Ventas totales producto por mes</Card.Title>
+          <canvas id="ventasTotalesproductomesChart" height="120"></canvas>         
+        </Card.Body>
+        <Card.Footer className="text-center">
+          <Button onClick={generarReporteVentasTotalesProductosPorMes}>
+            Generar PDF
+          </Button>
+          <Button onClick={generarReporteVentaProductomesImg}>
+          Generar imagen
+          </Button>
+          <Button onClick={generarReporteComprasImg}>
+          Correo
+          </Button>
+        </Card.Footer>
+      </Card>
+    </Col>
 
-  
-  <Col sm="6" md="6" lg="6">
-        <Card>
-          <Card.Body>
-            <Card.Title>Ventas totales producto por mes</Card.Title>
-            <canvas id="ventasTotalesproductomesChart" height="120"></canvas>         
-          </Card.Body>
+    <Col sm={12} md={6} lg={6} className="mb-4">
+      <Card>
+        <Card.Body>
+          <Card.Title>Ventas totales top 5 productos</Card.Title>
+          <canvas id="ventasTotalestop5productoChart" height="120"></canvas>         
+        </Card.Body>
+        <Card.Footer className="text-center">
+          <Button onClick={generarReporteVentasTotalesTop5Productos}>
+            Generar PDF
+          </Button>
+          <Button onClick={generarReporteVentatopProductosImg}>
+            Generar imagen
+          </Button>
+          <Button onClick={generarReporteComprasImg}>
+          Correo
+          </Button>
+        </Card.Footer>
+      </Card>
+    </Col>
+  </Row>
+</Container>
 
-          <Card.Body>
-            <Button onClick={generarReporteVentasTotalesProductosPorMes}>
-              Generar PDF
-            </Button>
-          </Card.Body>
-        </Card>
-  </Col>
-
-
-
-  
-  <Col sm="6" md="6" lg="6">
-        <Card>
-          <Card.Body>
-            <Card.Title>Ventas totales top 5 productos</Card.Title>
-            <canvas id="ventasTotalestop5productoChart" height="120"></canvas>         
-          </Card.Body>
-
-          <Card.Body>
-            <Button onClick={generarReporteVentasTotalesTop5Productos}>
-              Generar PDF
-            </Button>
-          </Card.Body>
-        </Card>
-  </Col>
-      
-      
-      
-
-        </Row>
-      </Container>
 
     
     </div>
