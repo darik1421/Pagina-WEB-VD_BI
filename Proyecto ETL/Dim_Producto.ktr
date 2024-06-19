@@ -6,6 +6,7 @@
     <extended_description/>
     <trans_version/>
     <trans_type>Normal</trans_type>
+    <trans_status>0</trans_status>
     <directory>/</directory>
     <parameters>
     </parameters>
@@ -443,7 +444,7 @@
     <database>VariedadesDuarte</database>
     <port>3306</port>
     <username>root</username>
-    <password>Encrypted 2be98afc86aa7f2e4cb79ff238ec4ff8f</password>
+    <password>Encrypted 2be98afc86aa7f2e4a80ba7638cc2ff8e</password>
     <servername/>
     <data_tablespace/>
     <index_tablespace/>
@@ -567,17 +568,12 @@
     P.precio_Venta,
     P.precio_Compra,
     P.cantidad_Disponible,
-    C.calificacion,
     PC.nombre_Categoria,
     PM.nombre_Marca
 FROM
     Productos P
-    INNER JOIN Comentarios C ON P.id_Producto = C.id_Producto
-    INNER JOIN Categorias PC ON P.id_Categoria = PC.id_Categoria
-    INNER JOIN Marcas PM ON P.id_Marca = PM.id_Marca;
-
-
-
+INNER JOIN Categorias PC ON P.id_Categoria = PC.id_Categoria
+INNER JOIN Marcas PM ON P.id_Marca = PM.id_Marca;
 </sql>
     <limit>0</limit>
     <lookup/>
@@ -702,29 +698,6 @@ FROM
         <lenient_string_to_number>N</lenient_string_to_number>
       </value-meta>
       <value-meta>
-        <type>Integer</type>
-        <storagetype>normal</storagetype>
-        <name>calificacion</name>
-        <length>9</length>
-        <precision>0</precision>
-        <origin>Extraccion_Producto</origin>
-        <comments>calificacion</comments>
-        <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>.</decimal_symbol>
-        <grouping_symbol>,</grouping_symbol>
-        <currency_symbol/>
-        <trim_type>none</trim_type>
-        <case_insensitive>N</case_insensitive>
-        <collator_disabled>Y</collator_disabled>
-        <collator_strength>0</collator_strength>
-        <sort_descending>N</sort_descending>
-        <output_padding>N</output_padding>
-        <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>es_NI</date_format_locale>
-        <date_format_timezone>America/Managua</date_format_timezone>
-        <lenient_string_to_number>N</lenient_string_to_number>
-      </value-meta>
-      <value-meta>
         <type>String</type>
         <storagetype>normal</storagetype>
         <name>nombre_Categoria</name>
@@ -781,7 +754,7 @@ FROM
     </remotesteps>
     <GUI>
       <xloc>112</xloc>
-      <yloc>128</yloc>
+      <yloc>112</yloc>
       <draw>Y</draw>
     </GUI>
   </step>

@@ -431,7 +431,7 @@
     <created_date>2024/06/10 22:45:30.391</created_date>
     <modified_user>-</modified_user>
     <modified_date>2024/06/10 22:45:30.391</modified_date>
-    <key_for_session_key/>
+    <key_for_session_key>H4sIAAAAAAAA/wMAAAAAAAAAAAA=</key_for_session_key>
     <is_key_private>N</is_key_private>
   </info>
   <notepads>
@@ -564,7 +564,8 @@
     <connection>Conexion_BaseDatos</connection>
     <sql>SELECT
     id_Producto,
-    calificacion
+    calificacion,
+    fecha_Comentario
 FROM
     Comentarios;
 </sql>
@@ -581,7 +582,7 @@ FROM
         <name>id_Producto</name>
         <length>9</length>
         <precision>0</precision>
-        <origin>Table input</origin>
+        <origin>Extraccion_Calificacion</origin>
         <comments>id_Producto</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
         <decimal_symbol>.</decimal_symbol>
@@ -604,9 +605,32 @@ FROM
         <name>calificacion</name>
         <length>9</length>
         <precision>0</precision>
-        <origin>Table input</origin>
+        <origin>Extraccion_Calificacion</origin>
         <comments>calificacion</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>es_NI</date_format_locale>
+        <date_format_timezone>America/Managua</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Date</type>
+        <storagetype>normal</storagetype>
+        <name>fecha_Comentario</name>
+        <length>-1</length>
+        <precision>-1</precision>
+        <origin>Extraccion_Calificacion</origin>
+        <comments>fecha_Comentario</comments>
+        <conversion_Mask/>
         <decimal_symbol>.</decimal_symbol>
         <grouping_symbol>,</grouping_symbol>
         <currency_symbol/>

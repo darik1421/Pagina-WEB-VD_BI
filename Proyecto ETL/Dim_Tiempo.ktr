@@ -443,7 +443,7 @@
     <database>VariedadesDuarte</database>
     <port>3306</port>
     <username>root</username>
-    <password>Encrypted 2be98afc86aa7f2e4cb79ff238ec4ff8f</password>
+    <password>Encrypted 2be98afc86aa7f2e4a80ba7638cc2ff8e</password>
     <servername/>
     <data_tablespace/>
     <index_tablespace/>
@@ -575,7 +575,7 @@
 FROM 
     Ventas
 GROUP BY 
-    fecha_Venta;</sql>
+    Fecha_Venta;</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>

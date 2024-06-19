@@ -443,7 +443,7 @@
     <database>VariedadesDuarte</database>
     <port>3306</port>
     <username>root</username>
-    <password>Encrypted 2be98afc86aa7f2e4cb79ff238ec4ff8f</password>
+    <password>Encrypted 2be98afc86aa7f2e4a80ba7638cc2ff8e</password>
     <servername/>
     <data_tablespace/>
     <index_tablespace/>
@@ -499,6 +499,11 @@
     </attributes>
   </connection>
   <order>
+    <hop>
+      <from>Extraccion_Detalle_Venta</from>
+      <to>Carga_Venta</to>
+      <enabled>N</enabled>
+    </hop>
     <hop>
       <from>Extraccion_Detalle_Venta</from>
       <to>Carga_Venta</to>
@@ -566,6 +571,11 @@
     V.id_Venta,
     U.id_Usuario,
     CONCAT(
+        YEAR(V.fecha_Venta), 
+        LPAD(MONTH(V.fecha_Venta), 2, '0'), 
+        LPAD(DAY(V.fecha_Venta), 2, '0')
+    ) AS fecha,
+ CONCAT(
         YEAR(V.fecha_Venta), 
         LPAD(MONTH(V.fecha_Venta), 2, '0'), 
         LPAD(DAY(V.fecha_Venta), 2, '0')
@@ -643,6 +653,29 @@ INNER JOIN Usuarios U ON V.id_Usuario = U.id_Usuario;
         <origin>Extraccion_Detalle_Venta</origin>
         <comments>id_Usuario</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>es_NI</date_format_locale>
+        <date_format_timezone>America/Managua</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>fecha</name>
+        <length>9</length>
+        <precision>-1</precision>
+        <origin>Extraccion_Detalle_Venta</origin>
+        <comments>fecha</comments>
+        <conversion_Mask/>
         <decimal_symbol>.</decimal_symbol>
         <grouping_symbol>,</grouping_symbol>
         <currency_symbol/>
