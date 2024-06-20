@@ -24,7 +24,7 @@ function BI({ rol }) {
                                 <div className="iframe-container mt-4"> {/* Agregamos la clase mt-4 para el margen */}
                                     <iframe
                                         title="REPORTE KARDEX"
-                                        src="https://app.powerbi.com/view?r=eyJrIjoiYzJhY2RhOTEtMGIzNy00ZjE2LWFlZGYtZTVmOThjNjY0Yzk2IiwidCI6ImU0NzY0NmZlLWRhMjctNDUxOC04NDM2LTVmOGIxNThiYTEyNyIsImMiOjR9"
+                                        src="https://app.powerbi.com/view?r=eyJrIjoiMzM0Yjk0Y2UtM2IwMy00ZTRjLTljNWUtYzNjNWQ0YmM4ZDhlIiwidCI6ImU0NzY0NmZlLWRhMjctNDUxOC04NDM2LTVmOGIxNThiYTEyNyIsImMiOjR9"
                                         frameBorder="0"
                                         allowFullScreen
                                     ></iframe>
@@ -47,7 +47,7 @@ function BI({ rol }) {
                                 <div className="iframe-container">
                                     <iframe
                                         title="REPORTE KARDEX"
-                                        src="https://app.powerbi.com/view?r=eyJrIjoiYzJhY2RhOTEtMGIzNy00ZjE2LWFlZGYtZTVmOThjNjY0Yzk2IiwidCI6ImU0NzY0NmZlLWRhMjctNDUxOC04NDM2LTVmOGIxNThiYTEyNyIsImMiOjR9"
+                                        src="https://app.powerbi.com/view?r=eyJrIjoiMzM0Yjk0Y2UtM2IwMy00ZTRjLTljNWUtYzNjNWQ0YmM4ZDhlIiwidCI6ImU0NzY0NmZlLWRhMjctNDUxOC04NDM2LTVmOGIxNThiYTEyNyIsImMiOjR9"
                                         frameBorder="0"
                                         allowFullScreen
                                     ></iframe>
@@ -70,7 +70,7 @@ function BI({ rol }) {
                                 <div className="iframe-container">
                                     <iframe
                                         title="REPORTE KARDEX"
-                                        src="https://app.powerbi.com/view?r=eyJrIjoiYzJhY2RhOTEtMGIzNy00ZjE2LWFlZGYtZTVmOThjNjY0Yzk2IiwidCI6ImU0NzY0NmZlLWRhMjctNDUxOC04NDM2LTVmOGIxNThiYTEyNyIsImMiOjR9"
+                                        src="https://app.powerbi.com/view?r=eyJrIjoiMzM0Yjk0Y2UtM2IwMy00ZTRjLTljNWUtYzNjNWQ0YmM4ZDhlIiwidCI6ImU0NzY0NmZlLWRhMjctNDUxOC04NDM2LTVmOGIxNThiYTEyNyIsImMiOjR9"
                                         frameBorder="0"
                                         allowFullScreen
                                     ></iframe>
@@ -93,7 +93,7 @@ function BI({ rol }) {
                                 <div className="iframe-container">
                                     <iframe
                                         title="REPORTE KARDEX"
-                                        src="https://app.powerbi.com/view?r=eyJrIjoiYzJhY2RhOTEtMGIzNy00ZjE2LWFlZGYtZTVmOThjNjY0Yzk2IiwidCI6ImU0NzY0NmZlLWRhMjctNDUxOC04NDM2LTVmOGIxNThiYTEyNyIsImMiOjR9"
+                                        src="https://app.powerbi.com/view?r=eyJrIjoiMzM0Yjk0Y2UtM2IwMy00ZTRjLTljNWUtYzNjNWQ0YmM4ZDhlIiwidCI6ImU0NzY0NmZlLWRhMjctNDUxOC04NDM2LTVmOGIxNThiYTEyNyIsImMiOjR9"
                                         frameBorder="0"
                                         allowFullScreen
                                     ></iframe>
