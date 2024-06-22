@@ -6,6 +6,9 @@ import Chart from 'chart.js/auto';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import html2canvas from 'html2canvas';
 import emailjs from 'emailjs-com';
+import * as XLSX from 'xlsx';
+import { FaFileExcel  } from 'react-icons/fa6';
+
 
 
 function Estadisticas({ rol }) {
@@ -384,11 +387,141 @@ function Estadisticas({ rol }) {
                           });
                       };
 
+// Función para exportar a Excel
 
+//ESTADOS DE LAS COMPRAS
+ const exportarAExcelCompras = () => {
+  // Convertir los datos JSON a una hoja de trabajo de Excel
+  const worksheet = XLSX.utils.json_to_sheet(compras);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Estados de las compras');
 
+  // Generar y descargar el archivo Excel
+  XLSX.writeFile(workbook, 'Estados de las compras.xlsx');
+};
 
+//ESTADOS DEL ALMACEN
+const exportarAExcelAlmacen = () => {
+  // Convertir los datos JSON a una hoja de trabajo de Excel
+  const worksheet = XLSX.utils.json_to_sheet(compras2);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Estados de Almacen');
 
+  // Generar y descargar el archivo Excel
+  XLSX.writeFile(workbook, 'Estados de Almacen.xlsx'  );
+};
+
+//PRODUCTOS POR CATEGORIA
+const exportarAExcelProductosPorCategoria = () => {
+  // Convertir los datos JSON a una hoja de trabajo de Excel
+  const worksheet = XLSX.utils.json_to_sheet(productosPorCategoria);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Productos por categoria');
+
+  // Generar y descargar el archivo Excel
+  XLSX.writeFile(workbook, 'Productos por categoria.xlsx'  );
+};
+
+//VENTAS MES ESPECIFICO
+const exportarAExcelVentasTotalesPorMesEspecifico = () => {
+  // Convertir los datos JSON a una hoja de trabajo de Excel
+  const worksheet = XLSX.utils.json_to_sheet(ventasTotalesmesespecifico);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Ventas totales por mes especifico');
+
+  // Generar y descargar el archivo Excel
+  XLSX.writeFile(workbook, 'Ventas totales por mes especifico.xlsx'  );
+};
+//VENTAS TOTALES POR DIA DE UN MES ESPECIFICO
+const exportarAExcelVentasTotalesPorDiaMesEspecifico = () => {
+  // Convertir los datos JSON a una hoja de trabajo de Excel
+  const worksheet = XLSX.utils.json_to_sheet(ventasTotalesmesanio);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Ventas totales por dia de un mes especifico');
+
+  // Generar y descargar el archivo Excel
+  XLSX.writeFile(workbook, 'Ventas totales por dia de un mes especifico.xlsx'  );
+};
+
+//VENTAS TOTALES POR AÑO
+
+const exportarAExcelVentasTotalesAnio = () => {
+  // Convertir los datos JSON a una hoja de trabajo de Excel
+  const worksheet = XLSX.utils.json_to_sheet(ventasPorAnio);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Ventas totales por año');
+
+  // Generar y descargar el archivo Excel
+  XLSX.writeFile(workbook, 'Ventas totales por año.xlsx'  );
+};
+
+//VENTAS TOTALES POR PRODCUCTO
+const exportarAExcelVentasTotalesProducto = () => {
+  // Convertir los datos JSON a una hoja de trabajo de Excel
+  const worksheet = XLSX.utils.json_to_sheet(ventasTotalesproducto);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Ventas totales por Producto');
+
+  // Generar y descargar el archivo Excel
+  XLSX.writeFile(workbook, 'Ventas totales por producto.xlsx'  );
+};
+
+//VENTAS TOTALES POR CATEGORIA
+const exportarAExcelVentasTotalesCategoria = () => {
+  // Convertir los datos JSON a una hoja de trabajo de Excel
+  const worksheet = XLSX.utils.json_to_sheet(ventasTotalescategoria);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Ventas totales por categoria');
+
+  // Generar y descargar el archivo Excel
+  XLSX.writeFile(workbook, 'Ventas totales por categoria.xlsx'  );
+};
+
+//VENTAS TOTALES POR TRIMESTRE
+const exportarAExcelVentasTotalesTrimestre = () => {
+  // Convertir los datos JSON a una hoja de trabajo de Excel
+  const worksheet = XLSX.utils.json_to_sheet(ventasTotalestrimestre);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Ventas totales por trimestre');
+
+  // Generar y descargar el archivo Excel
+  XLSX.writeFile(workbook, 'ventas totales por trimestre.xlsx'  );
+};
+
+//VENTAS TOTALES PROMEDIO PRODUCTO
+const exportarAExcelVentasTotalesPromedioProducto = () => {
+  // Convertir los datos JSON a una hoja de trabajo de Excel
+  const worksheet = XLSX.utils.json_to_sheet(ventasTotalespromedioproducto);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Ventas totales promedio');
+
+  // Generar y descargar el archivo Excel
+  XLSX.writeFile(workbook, 'ventas totales promedio.xlsx'  );
+};
+
+//VENTAS TOTALES PRODUCTO POR MES
+const exportarAExcelVentasTotalesProductoPormes = () => {
+  // Convertir los datos JSON a una hoja de trabajo de Excel
+  const worksheet = XLSX.utils.json_to_sheet(ventasTotalesproductomes);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Ventas totales producto por mes');
+
+  // Generar y descargar el archivo Excel
+  XLSX.writeFile(workbook, 'ventas totales producto por mes.xlsx'  );
+};
   
+//VENTAS TOTALES TOP 5 PRODUCTOS
+const exportarAExcelVentasTotalesTop5 = () => {
+  // Convertir los datos JSON a una hoja de trabajo de Excel
+  const worksheet = XLSX.utils.json_to_sheet(ventasTotalestop5producto);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Ventas totales top 5 productos');
+
+  // Generar y descargar el archivo Excel
+  XLSX.writeFile(workbook, 'ventas totales top 5 productos.xlsx'  );
+};
+
+
     //Apartado de estadistica de pastel
   useEffect(()=> {
     fetch('http://localhost:5000/crud/productosPorCategoria')
@@ -1540,7 +1673,7 @@ function Estadisticas({ rol }) {
     <Col sm={12} md={6} lg={6} className="mb-4">
       <Card>
         <Card.Body>
-          <Card.Title className="text-center">Estados de las compras</Card.Title>
+          <Card.Title className="text-center">Estados de compras</Card.Title>
           <div className="my-4">
             <canvas id="myChart" height="200"></canvas>
           </div>
@@ -1553,8 +1686,12 @@ function Estadisticas({ rol }) {
           Generar imagen
           </Button>
           <Button variant="secondary" onClick={enviarCorreo1} className="mt-2">
-    Enviar por Correo
-  </Button>
+          Enviar por Correo
+          </Button>
+          <Button variant="success" onClick={exportarAExcelCompras} className="m-1">
+          <FaFileExcel style={{ color: 'white' }} />
+          </Button>
+
         </Card.Footer>
       </Card>
     </Col>
@@ -1575,8 +1712,11 @@ function Estadisticas({ rol }) {
           Generar imagen
           </Button>
           <Button variant="secondary" onClick={enviarCorreo2} className="mt-2">
-    Enviar por Correo
-  </Button>
+          Enviar por Correo
+          </Button>
+          <Button variant="success" onClick={exportarAExcelAlmacen} className="m-1">
+          <FaFileExcel style={{ color: 'white' }} />
+          </Button>
         </Card.Footer>
       </Card>
     </Col>
@@ -1595,8 +1735,11 @@ function Estadisticas({ rol }) {
           Generar imagen
           </Button>
           <Button variant="secondary" onClick={enviarCorreo3} className="mt-2">
-    Enviar por Correo
-  </Button>
+          Enviar por Correo
+          </Button>
+          <Button variant="success" onClick={exportarAExcelProductosPorCategoria} className="m-1">
+          <FaFileExcel style={{ color: 'white' }} />
+          </Button>
         </Card.Footer>
       </Card>
     </Col>
@@ -1609,14 +1752,17 @@ function Estadisticas({ rol }) {
         </Card.Body>
         <Card.Footer className="text-center">
           <Button onClick={generarReporteVentasMesEspe}>
-            Generar PDF
+          Generar PDF
           </Button>
           <Button onClick={generarReportePormesEspeImg}>
           Generar imagen
           </Button>
           <Button variant="secondary" onClick={enviarCorreo4} className="mt-2">
-    Enviar por Correo
-  </Button>
+          Enviar por Correo
+          </Button>
+          <Button variant="success" onClick={exportarAExcelVentasTotalesPorMesEspecifico} className="m-1">
+          <FaFileExcel style={{ color: 'white' }} />
+          </Button>
         </Card.Footer>
       </Card>
     </Col>
@@ -1636,8 +1782,11 @@ function Estadisticas({ rol }) {
           Generar imagen
           </Button>
           <Button variant="secondary" onClick={enviarCorreo5} className="mt-2">
-    Enviar por Correo
-  </Button>
+          Enviar por Correo
+          </Button>
+          <Button variant="success" onClick={exportarAExcelVentasTotalesPorDiaMesEspecifico} className="m-1">
+          <FaFileExcel style={{ color: 'white' }} />
+          </Button>
         </Card.Footer>
       </Card>
     </Col>
@@ -1657,8 +1806,11 @@ function Estadisticas({ rol }) {
           Generar imagen
           </Button>
           <Button variant="secondary" onClick={enviarCorreo6} className="mt-2">
-    Enviar por Correo
-  </Button>
+          Enviar por Correo
+          </Button>
+          <Button variant="success" onClick={exportarAExcelVentasTotalesAnio} className="m-1">
+          <FaFileExcel style={{ color: 'white' }} />
+          </Button>
         </Card.Footer>
       </Card>
     </Col>
@@ -1677,8 +1829,11 @@ function Estadisticas({ rol }) {
           Generar imagen
           </Button>
           <Button variant="secondary" onClick={enviarCorreo7} className="mt-2">
-    Enviar por Correo
-  </Button>
+          Enviar por Correo
+          </Button>
+          <Button variant="success" onClick={exportarAExcelVentasTotalesProducto} className="m-1">
+            <FaFileExcel style={{ color: 'white' }} />
+          </Button>
         </Card.Footer>
       </Card>
     </Col>
@@ -1697,8 +1852,11 @@ function Estadisticas({ rol }) {
           Generar imagen
           </Button>
           <Button variant="secondary" onClick={enviarCorreo8} className="mt-2">
-    Enviar por Correo
-  </Button>
+          Enviar por Correo
+          </Button>
+          <Button variant="success" onClick={exportarAExcelVentasTotalesCategoria} className="m-1">
+          <FaFileExcel style={{ color: 'white' }} />
+          </Button>
         </Card.Footer>
       </Card>
     </Col>
@@ -1717,8 +1875,11 @@ function Estadisticas({ rol }) {
           Generar imagen
           </Button>
           <Button variant="secondary" onClick={enviarCorreo9} className="mt-2">
-    Enviar por Correo
-  </Button>
+          Enviar por Correo
+          </Button>
+          <Button variant="success" onClick={exportarAExcelVentasTotalesTrimestre} className="m-1">
+          <FaFileExcel style={{ color: 'white' }} />
+          </Button>
         </Card.Footer>
       </Card>
     </Col>
@@ -1737,8 +1898,11 @@ function Estadisticas({ rol }) {
           Generar imagen
           </Button>
           <Button variant="secondary" onClick={enviarCorreo10} className="mt-2">
-    Enviar por Correo
-  </Button>
+            Enviar por Correo
+          </Button>
+          <Button variant="success" onClick={exportarAExcelVentasTotalesPromedioProducto} className="m-1">
+            <FaFileExcel style={{ color: 'white' }} />
+          </Button>
         </Card.Footer>
       </Card>
     </Col>
@@ -1757,8 +1921,11 @@ function Estadisticas({ rol }) {
           Generar imagen
           </Button>
           <Button variant="secondary" onClick={enviarCorreo11} className="mt-2">
-    Enviar por Correo
-  </Button>
+          Enviar por Correo
+          </Button>
+          <Button variant="success" onClick={exportarAExcelVentasTotalesProductoPormes} className="m-1">
+          <FaFileExcel style={{ color: 'white' }} />
+          </Button>
         </Card.Footer>
       </Card>
     </Col>
@@ -1777,8 +1944,11 @@ function Estadisticas({ rol }) {
             Generar imagen
           </Button>
           <Button variant="secondary" onClick={enviarCorreo12} className="mt-2">
-    Enviar por Correo
-  </Button>
+            Enviar por Correo
+          </Button>
+          <Button variant="success" onClick={exportarAExcelVentasTotalesTop5} className="m-1">
+            <FaFileExcel style={{ color: 'white' }} />
+          </Button>
         </Card.Footer>
       </Card>
     </Col>
