@@ -7,7 +7,7 @@ import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import html2canvas from 'html2canvas';
 import emailjs from 'emailjs-com';
 import * as XLSX from 'xlsx';
-import { FaFileExcel  } from 'react-icons/fa6';
+import { FaFileExcel,FaEnvelopeCircleCheck, FaFilePdf, FaFileImage  } from 'react-icons/fa6';
 
 
 
@@ -1095,11 +1095,11 @@ const exportarAExcelVentasTotalesTop5 = () => {
         const headers = ['Producto','Precio Venta', 'Precio Compra', 'Stock', 'Cantidad Vendida', 'Total Venta'];
         const data = detallesCompra.map((detalleCompra) => [
           detalleCompra.nombre_Producto,
-          `C$ ${formatearNumeroConComas(detalleCompra.precio_Venta.toFixed(2))}`,
-          `C$ ${formatearNumeroConComas(detalleCompra.precio_Compra.toFixed(2))}`,
+          `C$ ${formatearNumeroConComas(detalleCompra.precio_Venta)}`,
+          `C$ ${formatearNumeroConComas(detalleCompra.precio_Compra)}`,
           detalleCompra.cantidad_Disponible,
           detalleCompra.cantidad_Productos,
-          `C$ ${detalleCompra.total_Venta.toFixed(2)}`,
+          `C$ ${formatearNumeroConComas(detalleCompra.total_Venta)}`,
         ]);
   
         try {
@@ -1679,14 +1679,14 @@ const exportarAExcelVentasTotalesTop5 = () => {
           </div>
         </Card.Body>
         <Card.Footer className="text-center">
-          <Button variant="primary" className='mr-2' onClick={generarReporteCompras}>
-            Generar Reporte
+          <Button variant="primary" className='m-1' onClick={generarReporteCompras}>
+          <FaFilePdf style={{ color: 'white' }} />
           </Button>
-          <Button onClick={generarReporteComprasImg}>
-          Generar imagen
+          <Button onClick={generarReporteComprasImg} className="m-1">
+          <FaFileImage style={{ color: 'white' }} />
           </Button>
-          <Button variant="secondary" onClick={enviarCorreo1} className="mt-2">
-          Enviar por Correo
+          <Button variant="secondary" onClick={enviarCorreo1} className="m-1">
+          <FaEnvelopeCircleCheck style={{ color: 'white' }} />
           </Button>
           <Button variant="success" onClick={exportarAExcelCompras} className="m-1">
           <FaFileExcel style={{ color: 'white' }} />
@@ -1706,13 +1706,13 @@ const exportarAExcelVentasTotalesTop5 = () => {
         </Card.Body>
         <Card.Footer className="text-center">
           <Button variant="primary" className='mr-2' onClick={generarReporteAlmacen}>
-            Generar Reporte
+          <FaFilePdf style={{ color: 'white' }} />
           </Button>
           <Button onClick={generarReporteAlmacenImg}>
-          Generar imagen
+          <FaFileImage style={{ color: 'white' }} />
           </Button>
           <Button variant="secondary" onClick={enviarCorreo2} className="mt-2">
-          Enviar por Correo
+          <FaFileExcel style={{ color: 'white' }} />
           </Button>
           <Button variant="success" onClick={exportarAExcelAlmacen} className="m-1">
           <FaFileExcel style={{ color: 'white' }} />
@@ -1729,13 +1729,13 @@ const exportarAExcelVentasTotalesTop5 = () => {
         </Card.Body>
         <Card.Footer className="text-center">
           <Button onClick={generarReporteProductosPorCategoria}>
-            Generar PDF
+          <FaFilePdf style={{ color: 'white' }} />
           </Button>
           <Button onClick={generarReporteProductoCateImg}>
-          Generar imagen
+          <FaFileImage style={{ color: 'white' }} />
           </Button>
           <Button variant="secondary" onClick={enviarCorreo3} className="mt-2">
-          Enviar por Correo
+          <FaFileExcel style={{ color: 'white' }} />
           </Button>
           <Button variant="success" onClick={exportarAExcelProductosPorCategoria} className="m-1">
           <FaFileExcel style={{ color: 'white' }} />
@@ -1752,13 +1752,13 @@ const exportarAExcelVentasTotalesTop5 = () => {
         </Card.Body>
         <Card.Footer className="text-center">
           <Button onClick={generarReporteVentasMesEspe}>
-          Generar PDF
+          <FaFilePdf style={{ color: 'white' }} />
           </Button>
           <Button onClick={generarReportePormesEspeImg}>
-          Generar imagen
+          <FaFileImage style={{ color: 'white' }} />
           </Button>
           <Button variant="secondary" onClick={enviarCorreo4} className="mt-2">
-          Enviar por Correo
+          <FaFileExcel style={{ color: 'white' }} />
           </Button>
           <Button variant="success" onClick={exportarAExcelVentasTotalesPorMesEspecifico} className="m-1">
           <FaFileExcel style={{ color: 'white' }} />
@@ -1776,13 +1776,13 @@ const exportarAExcelVentasTotalesTop5 = () => {
         </Card.Body>
         <Card.Footer className="text-center">
           <Button onClick={generarReporteVentasDia}>
-            Generar PDF
+          <FaFilePdf style={{ color: 'white' }} />
           </Button>
           <Button onClick={generarReporteVentadiaImg}>
-          Generar imagen
+          <FaFileImage style={{ color: 'white' }} />
           </Button>
           <Button variant="secondary" onClick={enviarCorreo5} className="mt-2">
-          Enviar por Correo
+          <FaFileExcel style={{ color: 'white' }} />
           </Button>
           <Button variant="success" onClick={exportarAExcelVentasTotalesPorDiaMesEspecifico} className="m-1">
           <FaFileExcel style={{ color: 'white' }} />
@@ -1800,13 +1800,13 @@ const exportarAExcelVentasTotalesTop5 = () => {
         </Card.Body>
         <Card.Footer className="text-center">
           <Button onClick={generarReporteVentasAño}>
-            Generar PDF
+          <FaFilePdf style={{ color: 'white' }} />
           </Button>
           <Button onClick={generarReporteVentaAnioImg}>
-          Generar imagen
+          <FaFileImage style={{ color: 'white' }} />
           </Button>
           <Button variant="secondary" onClick={enviarCorreo6} className="mt-2">
-          Enviar por Correo
+          <FaFileExcel style={{ color: 'white' }} />
           </Button>
           <Button variant="success" onClick={exportarAExcelVentasTotalesAnio} className="m-1">
           <FaFileExcel style={{ color: 'white' }} />
@@ -1823,13 +1823,13 @@ const exportarAExcelVentasTotalesTop5 = () => {
         </Card.Body>
         <Card.Footer className="text-center">
           <Button onClick={generarReporteVentasTotalesPorProducto}>
-            Generar PDF
+          <FaFilePdf style={{ color: 'white' }} />
           </Button>
           <Button onClick={generarReporteVentaProductoImg}>
-          Generar imagen
+          <FaFileImage style={{ color: 'white' }} />
           </Button>
           <Button variant="secondary" onClick={enviarCorreo7} className="mt-2">
-          Enviar por Correo
+          <FaFileExcel style={{ color: 'white' }} />
           </Button>
           <Button variant="success" onClick={exportarAExcelVentasTotalesProducto} className="m-1">
             <FaFileExcel style={{ color: 'white' }} />
@@ -1846,13 +1846,13 @@ const exportarAExcelVentasTotalesTop5 = () => {
         </Card.Body>
         <Card.Footer className="text-center">
           <Button onClick={generarReporteCategoria}>
-            Generar PDF
+          <FaFilePdf style={{ color: 'white' }} />
           </Button>
           <Button onClick={generarReporteVentaCateImg}>
-          Generar imagen
+          <FaFileImage style={{ color: 'white' }} />
           </Button>
           <Button variant="secondary" onClick={enviarCorreo8} className="mt-2">
-          Enviar por Correo
+          <FaFileExcel style={{ color: 'white' }} />
           </Button>
           <Button variant="success" onClick={exportarAExcelVentasTotalesCategoria} className="m-1">
           <FaFileExcel style={{ color: 'white' }} />
@@ -1869,13 +1869,13 @@ const exportarAExcelVentasTotalesTop5 = () => {
         </Card.Body>
         <Card.Footer className="text-center">
           <Button onClick={generarReporteVentasTotalesTrismestre}>
-            Generar PDF
+          <FaFilePdf style={{ color: 'white' }} />
           </Button>
           <Button onClick={generarReporteVentaTrimestreImg}>
-          Generar imagen
+          <FaFileImage style={{ color: 'white' }} />
           </Button>
           <Button variant="secondary" onClick={enviarCorreo9} className="mt-2">
-          Enviar por Correo
+          <FaFileExcel style={{ color: 'white' }} />
           </Button>
           <Button variant="success" onClick={exportarAExcelVentasTotalesTrimestre} className="m-1">
           <FaFileExcel style={{ color: 'white' }} />
@@ -1892,13 +1892,13 @@ const exportarAExcelVentasTotalesTop5 = () => {
         </Card.Body>
         <Card.Footer className="text-center">
           <Button onClick={generarReportePromedioVentasTotalesProducto}>
-            Generar PDF
+          <FaFilePdf style={{ color: 'white' }} />
           </Button>
           <Button onClick={generarReporteVentaPromedioImg}>
-          Generar imagen
+          <FaFileImage style={{ color: 'white' }} />
           </Button>
           <Button variant="secondary" onClick={enviarCorreo10} className="mt-2">
-            Enviar por Correo
+          <FaFileExcel style={{ color: 'white' }} />
           </Button>
           <Button variant="success" onClick={exportarAExcelVentasTotalesPromedioProducto} className="m-1">
             <FaFileExcel style={{ color: 'white' }} />
@@ -1915,13 +1915,13 @@ const exportarAExcelVentasTotalesTop5 = () => {
         </Card.Body>
         <Card.Footer className="text-center">
           <Button onClick={generarReporteVentasTotalesProductosPorMes}>
-            Generar PDF
+          <FaFilePdf style={{ color: 'white' }} />
           </Button>
           <Button onClick={generarReporteVentaProductomesImg}>
-          Generar imagen
+          <FaFileExcel style={{ color: 'white' }} />
           </Button>
           <Button variant="secondary" onClick={enviarCorreo11} className="mt-2">
-          Enviar por Correo
+          <FaFileExcel style={{ color: 'white' }} />
           </Button>
           <Button variant="success" onClick={exportarAExcelVentasTotalesProductoPormes} className="m-1">
           <FaFileExcel style={{ color: 'white' }} />
@@ -1938,13 +1938,13 @@ const exportarAExcelVentasTotalesTop5 = () => {
         </Card.Body>
         <Card.Footer className="text-center">
           <Button onClick={generarReporteVentasTotalesTop5Productos}>
-            Generar PDF
+          <FaFilePdf style={{ color: 'white' }} />
           </Button>
           <Button onClick={generarReporteVentatopProductosImg}>
-            Generar imagen
+          <FaFileExcel style={{ color: 'white' }} />
           </Button>
           <Button variant="secondary" onClick={enviarCorreo12} className="mt-2">
-            Enviar por Correo
+          <FaFileExcel style={{ color: 'white' }} />
           </Button>
           <Button variant="success" onClick={exportarAExcelVentasTotalesTop5} className="m-1">
             <FaFileExcel style={{ color: 'white' }} />
