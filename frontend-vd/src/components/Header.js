@@ -233,7 +233,7 @@ function Header({ rol }) {
           </Offcanvas>
         </div>)}
 
-      {rol === 'cliente' && (
+      {rol === 'Cliente' && (
         <div>
           <Navbar className="navbar-color" variant="dark" expand="md" fixed='top'>
             <Container>

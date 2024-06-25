@@ -911,9 +911,6 @@ function Estadisticas({ rol }) {
       .then((data) => setCompras(data))
       .catch((error) => console.error('Error al obtener los detalles de compra:', error));
   }, []);
-
-
-
   useEffect(() => {
     if (compras.length > 0) {
       const ctx = document.getElementById('myChart');
@@ -930,7 +927,7 @@ function Estadisticas({ rol }) {
         data: {
           labels: nombresProductos,
           datasets: [{
-            label: 'Total de las compras',
+            label: 'Total de las Ventas',
             data: totalcompra,
             backgroundColor: 'rgba(0, 128, 0, 0.5)',
             borderColor: 'rgba(0, 128, 0, 1)',
@@ -1540,7 +1537,7 @@ function Estadisticas({ rol }) {
     <Col sm={12} md={6} lg={6} className="mb-4">
       <Card>
         <Card.Body>
-          <Card.Title className="text-center">Estados de las compras</Card.Title>
+          <Card.Title className="text-center">Estados de las Ventas</Card.Title>
           <div className="my-4">
             <canvas id="myChart" height="200"></canvas>
           </div>
