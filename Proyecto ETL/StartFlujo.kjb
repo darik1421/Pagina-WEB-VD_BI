@@ -378,7 +378,7 @@
       <attributes/>
       <specification_method>filename</specification_method>
       <trans_object_id/>
-      <filename>C:/Users/Darikson/Desktop/Pagina-WEB-VD_BI/Proyecto ETL/Dim_Tiempo.ktr</filename>
+      <filename>C:/Users/PC12/Desktop/Pagina-WEB-VD_BI/Proyecto ETL/Dim_Tiempo.ktr</filename>
       <transname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -406,8 +406,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>560</xloc>
-      <yloc>80</yloc>
+      <xloc>720</xloc>
+      <yloc>128</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -417,7 +417,7 @@
       <attributes/>
       <specification_method>filename</specification_method>
       <trans_object_id/>
-      <filename>C:/Users/Darikson/Desktop/Pagina-WEB-VD_BI/Proyecto ETL/Dim_Usuario.ktr</filename>
+      <filename>C:/Users/PC12/Desktop/Pagina-WEB-VD_BI/Proyecto ETL/Dim_Usuario.ktr</filename>
       <transname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -445,8 +445,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>432</xloc>
-      <yloc>80</yloc>
+      <xloc>576</xloc>
+      <yloc>128</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -456,7 +456,7 @@
       <attributes/>
       <specification_method>filename</specification_method>
       <trans_object_id/>
-      <filename>C:/Users/Darikson/Desktop/Pagina-WEB-VD_BI/Proyecto ETL/Dim_Producto.ktr</filename>
+      <filename>C:/Users/PC12/Desktop/Pagina-WEB-VD_BI/Proyecto ETL/Dim_Producto.ktr</filename>
       <transname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -485,7 +485,7 @@
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>304</xloc>
-      <yloc>80</yloc>
+      <yloc>96</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -493,7 +493,11 @@
       <description/>
       <type>SQL</type>
       <attributes/>
-      <sql>TRUNCATE TABLE H_Ventas;</sql>
+      <sql>TRUNCATE TABLE H_Ventas;
+TRUNCATE TABLE D_Calificaciones;
+
+
+</sql>
       <useVariableSubstitution>F</useVariableSubstitution>
       <sqlfromfile>F</sqlfromfile>
       <sqlfilename/>
@@ -513,7 +517,7 @@
       <attributes/>
       <specification_method>filename</specification_method>
       <trans_object_id/>
-      <filename>C:/Users/Darikson/Desktop/Pagina-WEB-VD_BI/Proyecto ETL/Dim_Venta.ktr</filename>
+      <filename>C:/Users/PC12/Desktop/Pagina-WEB-VD_BI/Proyecto ETL/Dim_Venta.ktr</filename>
       <transname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -541,8 +545,47 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>688</xloc>
-      <yloc>80</yloc>
+      <xloc>864</xloc>
+      <yloc>64</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>Dim_Comentarios</name>
+      <description/>
+      <type>TRANS</type>
+      <attributes/>
+      <specification_method>filename</specification_method>
+      <trans_object_id/>
+      <filename>C:/Users/PC12/Desktop/Pagina-WEB-VD_BI/Proyecto ETL/Dim_Comentario.ktr</filename>
+      <transname/>
+      <arg_from_previous>N</arg_from_previous>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <clear_rows>N</clear_rows>
+      <clear_files>N</clear_files>
+      <set_logfile>N</set_logfile>
+      <logfile/>
+      <logext/>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Basic</loglevel>
+      <cluster>N</cluster>
+      <slave_server_name/>
+      <set_append_logfile>N</set_append_logfile>
+      <wait_until_finished>Y</wait_until_finished>
+      <follow_abort_remote>N</follow_abort_remote>
+      <create_parent_folder>N</create_parent_folder>
+      <logging_remote_work>N</logging_remote_work>
+      <run_configuration>Pentaho local</run_configuration>
+      <suppress_result_data>N</suppress_result_data>
+      <parameters>
+        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>416</xloc>
+      <yloc>112</yloc>
       <attributes_kjc/>
     </entry>
   </entries>
@@ -557,17 +600,8 @@
       <unconditional>Y</unconditional>
     </hop>
     <hop>
-      <from>SQL</from>
-      <to>Dim_Producto</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Dim_Producto</from>
-      <to>Dim_Usuario</to>
+      <from>Dim_Tiempo</from>
+      <to>Dim_Ventas</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -584,8 +618,26 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Dim_Tiempo</from>
-      <to>Dim_Ventas</to>
+      <from>SQL</from>
+      <to>Dim_Producto</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Dim_Producto</from>
+      <to>Dim_Comentarios</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Dim_Comentarios</from>
+      <to>Dim_Usuario</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
